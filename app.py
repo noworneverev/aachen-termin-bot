@@ -72,7 +72,7 @@ def hello_world():
     updater.idle()
     return 'Hello, World!'
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     # updater = Updater(TOKEN, use_context=True)
     # dp = updater.dispatcher
     # job_queue = updater.job_queue
@@ -81,4 +81,4 @@ if __name__ == '__main__':
     # dp.add_handler(CommandHandler('termin', termin_command))
     # updater.start_polling()
     # updater.idle()
-    app.run()
+    # app.run()
