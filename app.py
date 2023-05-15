@@ -23,6 +23,7 @@ load_dotenv()
 TOKEN = os.getenv("TOKEN")
 # BOT_USERNAME: Final = '@aachen_termin_bot'
 CHANNEL_ID: Final = '@aachen_termin'
+URL: Final = 'https://aachen-termin-bot.onrender.com'
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -60,17 +61,28 @@ def termin_cron(context):
     if aachen_termin():
         context.bot.send_message(chat_id=CHANNEL_ID,text=f'{"Appointment available now!"}')
 
+# @app.route('/')
+# def hello_world():
+#     bot = telegram.Bot(token=TOKEN)
+#     if aachen_termin():
+#         bot.send_message(chat_id=CHANNEL_ID, text='Appointment available now!')    
+#     else:
+#         bot.send_message(chat_id=CHANNEL_ID, text='No appointment available')
+#     return 'Hello, World!'
+
+@app.route('/status')
+def hello_world():    
+    return 'OK'
+
 @app.route('/')
 def hello_world():
-    bot = telegram.Bot(token=TOKEN)
-    if aachen_termin():
-        bot.send_message(chat_id=CHANNEL_ID, text='Appointment available now!')    
-    else:
-        bot.send_message(chat_id=CHANNEL_ID, text='No appointment available')
+    r = requests.get(f'{URL}/status')
+    print(r)
     return 'Hello, World!'
 
 @scheduler.task('interval', id='do_job_1', seconds=30, misfire_grace_time=900)
 def job1():
+    hello_world()
     bot = telegram.Bot(token=TOKEN)
     if aachen_termin():
         bot.send_message(chat_id=CHANNEL_ID, text='Appointment available now!')    
