@@ -71,7 +71,7 @@ def termin_cron(context):
 #     return 'Hello, World!'
 
 @app.route('/status')
-def hello_world():    
+def status():    
     return 'OK'
 
 @app.route('/')
