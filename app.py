@@ -1,6 +1,7 @@
 from typing import Final
 import requests
 import logging
+import telegram
 from telegram.ext import CommandHandler, Updater
 from dotenv import load_dotenv
 import os
@@ -50,29 +51,16 @@ def termin_cron(context):
     if aachen_termin():
         context.bot.send_message(chat_id=CHANNEL_ID,text=f'{"Appointment available now!"}')
 
-def run_bot():
-    updater = Updater(TOKEN, use_context=True)
-    dp = updater.dispatcher
-    job_queue = updater.job_queue
-    job_queue.run_repeating(termin_cron,interval=30.0,first=0.0)
-    dp.add_handler(CommandHandler('start', start_command))
-    dp.add_handler(CommandHandler('termin', termin_command))
-    updater.start_polling()
-    updater.idle()
-
 @app.route('/')
 def hello_world():
-    updater = Updater(TOKEN, use_context=True)
-    dp = updater.dispatcher
-    job_queue = updater.job_queue
-    job_queue.run_repeating(termin_cron,interval=30.0,first=0.0)
-    dp.add_handler(CommandHandler('start', start_command))
-    dp.add_handler(CommandHandler('termin', termin_command))
-    updater.start_polling()
-    updater.idle()
+    bot = telegram.Bot(token=TOKEN)
+    if aachen_termin():
+        bot.send_message(chat_id=CHANNEL_ID, text='Appointment available now!')    
+    else:
+        bot.send_message(chat_id=CHANNEL_ID, text='No appointment available')
     return 'Hello, World!'
 
-# if __name__ == '__main__':
+# if __name__ == '__main__':    
     # updater = Updater(TOKEN, use_context=True)
     # dp = updater.dispatcher
     # job_queue = updater.job_queue
