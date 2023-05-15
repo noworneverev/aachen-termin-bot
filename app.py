@@ -79,13 +79,13 @@ def job1():
     # print('Job 1 executed')
 
 
-if __name__ == '__main__':    
-    # updater = Updater(TOKEN, use_context=True)
-    # dp = updater.dispatcher
-    # job_queue = updater.job_queue
-    # job_queue.run_repeating(termin_cron,interval=30.0,first=0.0)
-    # dp.add_handler(CommandHandler('start', start_command))
-    # dp.add_handler(CommandHandler('termin', termin_command))
-    # updater.start_polling()
-    # updater.idle()
-    app.run()
+# if __name__ == '__main__':    
+#     # updater = Updater(TOKEN, use_context=True)
+#     # dp = updater.dispatcher
+#     # job_queue = updater.job_queue
+#     # job_queue.run_repeating(termin_cron,interval=30.0,first=0.0)
+#     # dp.add_handler(CommandHandler('start', start_command))
+#     # dp.add_handler(CommandHandler('termin', termin_command))
+#     # updater.start_polling()
+#     # updater.idle()
+#     app.run()
