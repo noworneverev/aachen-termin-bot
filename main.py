@@ -6,8 +6,17 @@ from telegram.ext import CommandHandler, Updater
 from dotenv import load_dotenv
 import os
 from flask import Flask
+from flask_apscheduler import APScheduler
+
+class Config:
+    SCHEDULER_API_ENABLED = True
 
 app = Flask(__name__)
+app.config.from_object(Config())
+
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
 
 load_dotenv()
 
@@ -60,7 +69,17 @@ def hello_world():
         bot.send_message(chat_id=CHANNEL_ID, text='No appointment available')
     return 'Hello, World!'
 
-# if __name__ == '__main__':    
+@scheduler.task('interval', id='do_job_1', seconds=30, misfire_grace_time=900)
+def job1():
+    bot = telegram.Bot(token=TOKEN)
+    if aachen_termin():
+        bot.send_message(chat_id=CHANNEL_ID, text='Appointment available now!')    
+    else:
+        bot.send_message(chat_id=CHANNEL_ID, text='No appointment available')
+    # print('Job 1 executed')
+
+
+if __name__ == '__main__':    
     # updater = Updater(TOKEN, use_context=True)
     # dp = updater.dispatcher
     # job_queue = updater.job_queue
@@ -69,4 +88,4 @@ def hello_world():
     # dp.add_handler(CommandHandler('termin', termin_command))
     # updater.start_polling()
     # updater.idle()
-    # app.run()
+    app.run()
