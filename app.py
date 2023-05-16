@@ -1,8 +1,6 @@
 from typing import Final
 import requests
-import logging
 import telegram
-from telegram.ext import CommandHandler, Updater
 from dotenv import load_dotenv
 import os
 from flask import Flask
