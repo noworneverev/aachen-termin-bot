@@ -30,14 +30,16 @@ def status():
     return 'OK'
 
 @app.route('/')
-def hello_world():
-    r = requests.get(f'{URL}/status')
-    print(r)
+def hello_world():    
     return 'Hello, World!'
 
 @scheduler.task('interval', id='do_job_1', seconds=30, misfire_grace_time=900)
-def job1():
-    hello_world()
+def job1():    
     bot = telegram.Bot(token=TOKEN)
     if aachen_termin():
-        bot.send_message(chat_id=CHANNEL_ID, text='Appointment available now!')        
+        bot.send_message(chat_id=CHANNEL_ID, text='Appointment available now!')  
+
+@scheduler.task('interval', id='do_job_2', seconds=300, misfire_grace_time=900)
+def job2():
+    r = requests.get(f'{URL}/status')
+    print(r)
