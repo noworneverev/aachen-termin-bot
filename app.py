@@ -43,3 +43,8 @@ def job1():
 def job2():
     r = requests.get(f'{URL}/status')
     print(r)
+
+@scheduler.task('cron', id='do_job_3', day='*')
+def job3():
+    r = requests.get(URL)
+    print(r)
