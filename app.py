@@ -36,8 +36,9 @@ def hello_world():
 @scheduler.task('interval', id='do_job_1', seconds=30, misfire_grace_time=900)
 def job1():    
     bot = telegram.Bot(token=TOKEN)
-    if aachen_termin():
-        bot.send_message(chat_id=CHANNEL_ID, text='Appointment available now!')  
+    is_available, res = aachen_termin()
+    if is_available:
+        bot.send_message(chat_id=CHANNEL_ID, text=f"Appointment available now!\n{res}")  
 
 @scheduler.task('interval', id='do_job_2', seconds=300, misfire_grace_time=900)
 def job2():

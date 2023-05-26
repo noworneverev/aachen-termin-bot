@@ -1,5 +1,6 @@
 import requests
 import logging
+import bs4
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -19,7 +20,15 @@ def aachen_termin():
     
     if "Kein freier Termin verfügbar" not in res_4.text:
         logging.info(f'{"Appointment available now!"}')
-        return True
+
+        # get exact termin date
+        soup = bs4.BeautifulSoup(res_4.text, 'html.parser')
+        div = soup.find("div", {"id": "sugg_accordion"})
+        h3 = div.find_all("h3")
+        res = ''
+        for h in h3:
+            res += h.text + '\n'             
+        return True, res[:-1]
     else:
-        logging.info(f'{"No appointment available"}')  
-        return False
+        logging.info(f'{"No appointment available"}')                
+        return False, None
