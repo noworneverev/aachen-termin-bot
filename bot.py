@@ -16,14 +16,13 @@ def start_command(update, context):
     update.message.reply_text("Hello! Welcome to Aachen Termin Bot! Join the channel @aachen_termin to get notified when appointment is available!", parse_mode = ParseMode.HTML)
 
 def termin_command(update, context):
-    if aachen_termin():
-        update.message.reply_text('Appointment available now!')
-    else:
-        update.message.reply_text('No appointment available')
+    _, res = aachen_termin()
+    update.message.reply_text(res)    
 
 def termin_cron(context):
-    if aachen_termin():
-        context.bot.send_message(chat_id=CHANNEL_ID,text=f'{"Appointment available now!"}')
+    is_available, res = aachen_termin()
+    if is_available:
+        context.bot.send_message(chat_id=CHANNEL_ID,text=res)
 
 if __name__ == '__main__':    
     updater = Updater(TOKEN, use_context=True)
