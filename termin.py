@@ -1,9 +1,9 @@
 import requests
 import logging
 import bs4
-from requests_html import HTMLSession
-from requests_html import AsyncHTMLSession
-import datetime
+# from requests_html import HTMLSession
+# from requests_html import AsyncHTMLSession
+# import datetime
 import enum
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)

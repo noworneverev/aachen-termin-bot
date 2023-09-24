@@ -25,6 +25,8 @@ TOKEN = os.getenv("TOKEN")
 CHANNEL_ID: Final = '@aachen_termin'
 URL: Final = 'https://aachen-termin-bot.onrender.com'
 
+# https://serviceportal.aachen.de/suche/-/vr-bis-detail/dienstleistung/5790/show
+
 KATSCHHOF_CHANNEL_ID_01: Final = '@'
 KATSCHHOF_CHANNEL_ID_02: Final = '@'
 KATSCHHOF_CHANNEL_ID_03: Final = '@'
