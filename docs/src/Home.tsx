@@ -73,7 +73,7 @@ const Home = () => (
                     </a>
                   </Table.Cell>
                   <Table.Cell textAlign="right">
-                    <Image src="/static/superc.jpeg" size="small" />
+                    <Image src="./static/superc.jpeg" size="small" />
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
@@ -191,7 +191,7 @@ const Home = () => (
                     </a>
                   </Table.Cell>
                   <Table.Cell>
-                    <Image src="/static/bah9.png" size="small" />
+                    <Image src="./static/bah9.png" size="small" />
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
@@ -206,7 +206,7 @@ const Home = () => (
                     </a>
                   </Table.Cell>
                   <Table.Cell>
-                    <Image src="/static/bah10.png" size="small" />
+                    <Image src="./static/bah10.png" size="small" />
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
@@ -221,7 +221,7 @@ const Home = () => (
                     </a>
                   </Table.Cell>
                   <Table.Cell>
-                    <Image src="/static/bah11.png" size="small" />
+                    <Image src="./static/bah11.png" size="small" />
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
@@ -236,7 +236,7 @@ const Home = () => (
                     </a>
                   </Table.Cell>
                   <Table.Cell>
-                    <Image src="/static/bah12.png" size="small" />
+                    <Image src="./static/bah12.png" size="small" />
                   </Table.Cell>
                 </Table.Row>
 
@@ -325,7 +325,7 @@ const Home = () => (
                     </a>
                   </Table.Cell>
                   <Table.Cell>
-                    <Image src="/static/kat9.png" size="small" />
+                    <Image src="./static/kat9.png" size="small" />
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
@@ -340,7 +340,7 @@ const Home = () => (
                     </a>
                   </Table.Cell>
                   <Table.Cell>
-                    <Image src="/static/kat10.png" size="small" />
+                    <Image src="./static/kat10.png" size="small" />
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
@@ -355,7 +355,7 @@ const Home = () => (
                     </a>
                   </Table.Cell>
                   <Table.Cell>
-                    <Image src="/static/kat11.png" size="small" />
+                    <Image src="./static/kat11.png" size="small" />
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
@@ -370,7 +370,7 @@ const Home = () => (
                     </a>
                   </Table.Cell>
                   <Table.Cell>
-                    <Image src="/static/kat12.png" size="small" />
+                    <Image src="./static/kat12.png" size="small" />
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
@@ -404,7 +404,10 @@ const Home = () => (
               If you find this project helpful, consider buying me a coffee ☕️
             </Message.Header>
             <Message.Content>
-              <a href="https://www.paypal.com/paypalme/yanyingliao">
+              <a
+                target="_blank"
+                href="https://www.paypal.com/paypalme/yanyingliao"
+              >
                 paypalme/yanyingliao
               </a>
             </Message.Content>
