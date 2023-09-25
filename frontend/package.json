@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "homepage": "https://noworneverev.github.io/aachen-termin-bot/frontend",
+  "homepage": "https://noworneverev.github.io/aachen-termin-bot",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -13,6 +13,7 @@
     "@types/react-dom": "^18.2.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4",
