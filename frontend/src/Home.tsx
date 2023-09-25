@@ -422,8 +422,7 @@ const Home = () => (
         <a
           target="_blank"
           href={"https://noworneverev.github.io"}
-          // underline="hover"
-          color="inherit"
+          rel="noreferrer"
         >
           Yan-Ying Liao
         </a>
