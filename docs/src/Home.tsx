@@ -404,11 +404,8 @@ const Home = () => (
               If you find this project helpful, consider buying me a coffee ☕️
             </Message.Header>
             <Message.Content>
-              <a
-                target="_blank"
-                href="https://www.paypal.com/paypalme/yanyingliao"
-              >
-                paypalme/yanyingliao
+              <a target="_blank" href="https://www.paypal.me/liaoyanying">
+                paypalme/liaoyanying
               </a>
             </Message.Content>
           </Message>
