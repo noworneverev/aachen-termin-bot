@@ -4,11 +4,12 @@ import {
   Divider,
   Grid,
   Header,
-  Image,
   Message,
   Segment,
   Table,
 } from "semantic-ui-react";
+import ModalContentImage from "./ModalContentImage";
+import { bahnhofLinks, katschhofLinks } from "./links";
 
 const Home = () => (
   <>
@@ -33,7 +34,7 @@ const Home = () => (
         <Grid.Column>
           <Message positive>
             Smooth out your appointment scheduling experience in Aachen with the
-            help of my Telegram Channels.
+            help of notifications from respective Telegram Channels.
           </Message>
         </Grid.Column>
       </Grid.Row>
@@ -44,9 +45,21 @@ const Home = () => (
           <Divider />
 
           <Message info>
-            This channel is exclusively for students of RWTH Aachen University
-            who are applying for visa extensions. Instant notifications will be
-            sent to the channel once appointment slots become available.
+            <p>
+              This channel is exclusively for students of RWTH Aachen University
+              who are applying for visa extensions. Instant notifications will
+              be sent to the channel once appointment slots become available.
+            </p>
+            <p>
+              SuperC Termin Link:{" "}
+              <a
+                target="_blank"
+                rel="noreferrer"
+                href="https://termine.staedteregion-aachen.de/auslaenderamt/"
+              >
+                https://termine.staedteregion-aachen.de/auslaenderamt/
+              </a>
+            </p>
           </Message>
           <Grid.Column width={16}>
             <Table celled structured>
@@ -72,8 +85,11 @@ const Home = () => (
                       https://t.me/aachen_termin
                     </a>
                   </Table.Cell>
-                  <Table.Cell textAlign="right">
-                    <Image src="./static/superc.jpeg" size="small" />
+                  <Table.Cell>
+                    <ModalContentImage
+                      imageUrl="./static/superc.jpeg"
+                      description="SuperC Termin"
+                    />
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
@@ -88,9 +104,32 @@ const Home = () => (
           <Divider />
 
           <Message info>
-            Every month has its own channel. Join the respective channels below
-            to receive instant notifications when appointment slots become
-            available at Bürgerservice Bahnhofplatz or Bürgerservice Katschhof.
+            <p>
+              Every month has its own channel. Join the respective channels
+              below to receive instant notifications when appointment slots
+              become available at Bürgerservice Bahnhofplatz or Bürgerservice
+              Katschhof.
+            </p>
+            <ul>
+              <li>
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://www.qtermin.de/bahnhofplatzkatschhof?calendarid=57003,57091,57092,57093,57094,71058,71059,71060,71061,71062,77257,77289,77291,77292,133608,133610,133607,133612,133614,133615,133616"
+                >
+                  Termin im Bürgerservice Bahnhofplatz vereinbaren
+                </a>
+              </li>
+              <li>
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://qtermin.de/BahnhofplatzKatschhof?calendarid=57095,57096,57097,74724,74725,133598"
+                >
+                  Termin im Bürgerservice Katschhof vereinbaren
+                </a>
+              </li>
+            </ul>
           </Message>
           <Grid.Column width={16}>
             <Table celled structured>
@@ -104,275 +143,59 @@ const Home = () => (
               </Table.Header>
 
               <Table.Body>
-                <Table.Row>
-                  <Table.Cell rowSpan="12">
-                    Bürgerservice Bahnhofplatz
-                  </Table.Cell>
-                  <Table.Cell>1</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>2</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>3</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>4</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>5</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>6</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>7</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>8</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>9</Table.Cell>
-                  <Table.Cell>
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://t.me/+4a4fC9-Kojs2OGUy"
-                    >
-                      https://t.me/+4a4fC9-Kojs2OGUy
-                    </a>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Image src="./static/bah9.png" size="small" />
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>10</Table.Cell>
-                  <Table.Cell>
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://t.me/+kiMHqloCLek3OWYy"
-                    >
-                      https://t.me/+kiMHqloCLek3OWYy
-                    </a>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Image src="./static/bah10.png" size="small" />
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>11</Table.Cell>
-                  <Table.Cell>
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://t.me/+Svisobbp7Ro5MDYy"
-                    >
-                      https://t.me/+Svisobbp7Ro5MDYy
-                    </a>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Image src="./static/bah11.png" size="small" />
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>12</Table.Cell>
-                  <Table.Cell>
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://t.me/+yOoYSrPiCeE0ODdi"
-                    >
-                      https://t.me/+yOoYSrPiCeE0ODdi
-                    </a>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Image src="./static/bah12.png" size="small" />
-                  </Table.Cell>
-                </Table.Row>
+                {bahnhofLinks.map((link, index) => (
+                  <Table.Row key={index}>
+                    {link.month === 1 ? (
+                      <Table.Cell rowSpan="12">
+                        Bürgerservice Bahnhofplatz
+                      </Table.Cell>
+                    ) : null}
 
-                <Table.Row>
-                  <Table.Cell rowSpan="12">Bürgerservice Katschhof</Table.Cell>
-                  <Table.Cell>1</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>2</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>3</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>4</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>5</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>6</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>7</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>8</Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <i>upcoming...</i>
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>9</Table.Cell>
-                  <Table.Cell>
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://t.me/+W9hjKx_btwJkNzky"
-                    >
-                      https://t.me/+W9hjKx_btwJkNzky
-                    </a>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Image src="./static/kat9.png" size="small" />
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>10</Table.Cell>
-                  <Table.Cell>
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://t.me/+Pxy0moX0wx1iYWVi"
-                    >
-                      https://t.me/+Pxy0moX0wx1iYWVi
-                    </a>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Image src="./static/kat10.png" size="small" />
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>11</Table.Cell>
-                  <Table.Cell>
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://t.me/+N8d35jHjkqdiMWFi"
-                    >
-                      https://t.me/+N8d35jHjkqdiMWFi
-                    </a>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Image src="./static/kat11.png" size="small" />
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>12</Table.Cell>
-                  <Table.Cell>
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://t.me/+L6l4eytXD9cyZGNi"
-                    >
-                      https://t.me/+L6l4eytXD9cyZGNi
-                    </a>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Image src="./static/kat12.png" size="small" />
-                  </Table.Cell>
-                </Table.Row>
+                    <Table.Cell>{link.month}</Table.Cell>
+                    <Table.Cell>
+                      <a
+                        target="_blank"
+                        rel="noreferrer"
+                        href={link.inviteLink}
+                      >
+                        {link.inviteLink}
+                      </a>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <ModalContentImage
+                        imageUrl={link.qrCode}
+                        description={link.description}
+                      />
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+
+                {katschhofLinks.map((link, index) => (
+                  <Table.Row key={index}>
+                    {link.month === 1 ? (
+                      <Table.Cell rowSpan="12">
+                        Bürgerservice Katschhof
+                      </Table.Cell>
+                    ) : null}
+
+                    <Table.Cell>{link.month}</Table.Cell>
+                    <Table.Cell>
+                      <a
+                        target="_blank"
+                        rel="noreferrer"
+                        href={link.inviteLink}
+                      >
+                        {link.inviteLink}
+                      </a>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <ModalContentImage
+                        imageUrl={link.qrCode}
+                        description={link.description}
+                      />
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
               </Table.Body>
             </Table>
           </Grid.Column>
@@ -404,7 +227,11 @@ const Home = () => (
               If you find this project helpful, consider buying me a coffee ☕️
             </Message.Header>
             <Message.Content>
-              <a target="_blank" href="https://www.paypal.me/liaoyanying">
+              <a
+                target="_blank"
+                rel="noreferrer"
+                href="https://www.paypal.me/liaoyanying"
+              >
                 paypalme/liaoyanying
               </a>
             </Message.Content>
