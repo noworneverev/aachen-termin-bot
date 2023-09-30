@@ -5,14 +5,13 @@ import {
   Grid,
   Header,
   Message,
-  Segment,
   Table,
 } from "semantic-ui-react";
 import ModalContentImage from "./ModalContentImage";
 import { bahnhofLinks, katschhofLinks } from "./links";
 
 const Home = () => (
-  <>
+  <Container>
     <Grid container style={{ padding: "5em 0em" }}>
       <Grid.Row>
         <Grid.Column>
@@ -239,23 +238,7 @@ const Home = () => (
         </Grid.Column>
       </Grid.Row>
     </Grid>
-    <Segment
-      inverted
-      style={{ margin: "5em 0em 0em", padding: "5em 0em" }}
-      vertical
-    >
-      <Container textAlign="center">
-        {"Made with ❤️ by "}
-        <a
-          target="_blank"
-          href={"https://noworneverev.github.io"}
-          rel="noreferrer"
-        >
-          Yan-Ying Liao
-        </a>
-      </Container>
-    </Segment>
-  </>
+  </Container>
 );
 
 export default Home;
