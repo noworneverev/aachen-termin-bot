@@ -61,7 +61,7 @@ def status():
 def hello_world():    
     return 'Hello, World!'
 
-@scheduler.task('interval', id='do_job_1', seconds=30, misfire_grace_time=900)
+@scheduler.task('interval', id='do_job_1', seconds=300, misfire_grace_time=900)
 def job1():    
     bot = telegram.Bot(token=TOKEN)
     notify_aachen_termin(bot)
