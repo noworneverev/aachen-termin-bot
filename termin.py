@@ -99,7 +99,7 @@ def aachen_termin():
                 res += h.text + '\n'             
             return True, res[:-1]
         else:
-            return True, "New appointments are available now!"
+            return False, "Cannot find sugg_accordion! Possible new appointments are available now!"
     else:
         logging.info(f'{"No appointment is available"}')                
         return False, "No appointment is available"
