@@ -92,11 +92,14 @@ def aachen_termin():
         # get exact termin date
         soup = bs4.BeautifulSoup(res_4.text, 'html.parser')
         div = soup.find("div", {"id": "sugg_accordion"})
-        h3 = div.find_all("h3")
-        res = 'New appointments are available now!\n'
-        for h in h3:
-            res += h.text + '\n'             
-        return True, res[:-1]
+        if div:
+            h3 = div.find_all("h3")
+            res = 'New appointments are available now!\n'
+            for h in h3:
+                res += h.text + '\n'             
+            return True, res[:-1]
+        else:
+            return True, "New appointments are available now!"
     else:
         logging.info(f'{"No appointment is available"}')                
         return False, "No appointment is available"
