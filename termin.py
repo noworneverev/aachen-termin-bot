@@ -86,23 +86,24 @@ def aachen_termin():
     # res_4 = requests.get(url_4, headers=headers,cookies=res_3.cookies)
     res_4 = requests.post(url_3, headers=headers,cookies=res_2.cookies, data=payload)        
         
-    if "Kein freier Termin verfügbar" not in res_4.text:
-        logging.info(f'{"Appointment available now!"}')
+    if "Kein freier Termin verfügbar" not in res_4.text:        
 
         # get exact termin date
         soup = bs4.BeautifulSoup(res_4.text, 'html.parser')
         div = soup.find("div", {"id": "sugg_accordion"})
         if div:
+            logging.info(f'{"Appointment available now in SuperC!"}')
             h3 = div.find_all("h3")
             res = 'New appointments are available now!\n'
             for h in h3:
                 res += h.text + '\n'             
             return True, res[:-1]
         else:
+            logging.info(f'{"Cannot find sugg_accordion! Possible new appointments are available now in SuperC!"}')                
             return False, "Cannot find sugg_accordion! Possible new appointments are available now!"
     else:
-        logging.info(f'{"No appointment is available"}')                
-        return False, "No appointment is available"
+        logging.info(f'{"No appointment is available in SuperC."}')                
+        return False, "No appointment is available in SuperC"
 
 # def berlin_termin():
 #     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"    
