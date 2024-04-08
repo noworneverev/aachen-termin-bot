@@ -1,9 +1,6 @@
 import requests
 import logging
 import bs4
-# from requests_html import HTMLSession
-# from requests_html import AsyncHTMLSession
-# import datetime
 import enum
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -11,12 +8,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 class Location(enum.Enum):    
     Katschhof = "Bürgerservice Katschhof"
     Bahnhofplatz = "Bürgerservice Bahnhofplatz"
-
-def get_termin_url(loc: Location):
-    if loc == Location.Katschhof:
-        pass
-    elif loc == Location.Bahnhofplatz:
-        pass
 
 def aachen_an(loc: Location, year: str, month: str):
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
@@ -68,24 +59,21 @@ def number_to_month(number):
     
     return month_dict.get(number, "Invalid Month")
 
-
-
 def aachen_termin():
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"    
     headers = {"User-Agent": user_agent}
+    session = requests.Session()
+    session.headers.update(headers)
+
+    url_1 = 'https://termine.staedteregion-aachen.de/auslaenderamt/select2?md=1'
+    url_2 = 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=86&select_cnc=1&cnc-270=0&cnc-271=0&cnc-264=0&cnc-267=0&cnc-268=0&cnc-272=0&cnc-255=0&cnc-269=0&cnc-262=0&cnc-256=0&cnc-251=0&cnc-253=0&cnc-254=0&cnc-274=0&cnc-252=0&cnc-258=0&cnc-257=1&cnc-260=0&cnc-263=0&cnc-259=0&cnc-249=0&cnc-250=0&cnc-261=0&cnc-266=0&cnc-265=0'    
+    url_3 = 'https://termine.staedteregion-aachen.de/auslaenderamt/suggest'
+    res_1 = session.get(url_1)
+    res_2 = session.get(url_2)
+    payload = {'loc':'35', 'gps_lat': '55.77858', 'gps_long': '65.07867', 'select_location': 'Ausländeramt Aachen - Außenstelle RWTH auswählen'}
+    res_3 = session.post(url_2, data=payload)
+    res_4 = session.get(url_3)
     
-    url_1 = 'https://termine.staedteregion-aachen.de/auslaenderamt/'    
-    url_2 = 'https://termine.staedteregion-aachen.de/auslaenderamt/select2?md=1'
-    # url_3 = "https://termine.staedteregion-aachen.de/auslaenderamt/suggest?mdt=52&select_cnc=1&cnc-204=0&cnc-205=0&cnc-198=0&cnc-201=0&cnc-202=0&cnc-189=0&cnc-203=0&cnc-196=0&cnc-200=0&cnc-199=0&cnc-188=0&cnc-186=0&cnc-193=0&cnc-183=0&cnc-184=0&cnc-185=0&cnc-187=0&cnc-190=0&cnc-195=0&cnc-191=1&cnc-194=0&cnc-197=0&cnc-192=0"    
-    # url_3 = 'https://termine.staedteregion-aachen.de/auslaenderamt/suggest?mdt=75&select_cnc=1&cnc-204=0&cnc-205=0&cnc-198=0&cnc-201=0&cnc-202=0&cnc-227=0&cnc-189=0&cnc-203=0&cnc-196=0&cnc-190=0&cnc-185=0&cnc-187=0&cnc-188=0&cnc-186=0&cnc-192=0&cnc-191=1&cnc-194=0&cnc-197=0&cnc-193=0&cnc-183=0&cnc-184=0&cnc-195=0&cnc-200=0&cnc-225=0'
-    url_3 = 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=78&select_cnc=1&cnc-204=0&cnc-205=0&cnc-198=0&cnc-201=0&cnc-202=0&cnc-227=0&cnc-232=0&cnc-203=0&cnc-196=0&cnc-190=0&cnc-185=0&cnc-187=0&cnc-188=0&cnc-186=0&cnc-192=0&cnc-191=1&cnc-194=0&cnc-197=0&cnc-193=0&cnc-183=0&cnc-184=0&cnc-195=0&cnc-200=0&cnc-228=0'
-    url_4 = 'https://termine.staedteregion-aachen.de/auslaenderamt/suggest?cnc-191=1&loc=28'             
-    res_2 = requests.get(url_2, headers=headers)            
-    res_3 = requests.get(url_3, headers=headers,cookies=res_2.cookies)    
-    payload = {'loc':'28', 'gps_lat': '55.77858', 'gps_long': '65.07867', 'select_location': 'Ausländeramt Aachen - Außenstelle RWTH auswählen'}
-    
-    # res_4 = requests.get(url_4, headers=headers,cookies=res_3.cookies)
-    res_4 = requests.post(url_3, headers=headers,cookies=res_2.cookies, data=payload)            
     if "Kein freier Termin verfügbar" not in res_4.text:        
         
         # get exact termin date
@@ -103,63 +91,6 @@ def aachen_termin():
             return False, "Cannot find sugg_accordion! Possible new appointments are available now!"
     else:
         logging.info(f'{"No appointment is available in SuperC."}')                
-        return False, "No appointment is available in SuperC"
+        return False, "No appointment is available in SuperC"    
 
 aachen_termin()
-# def berlin_termin():
-#     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"    
-#     headers = {"User-Agent": user_agent}
-
-#     url_start = 'https://otv.verwalt-berlin.de/ams/TerminBuchen'
-#     # url_buchen = 'https://otv.verwalt-berlin.de/ams/TerminBuchen/wizardng?sprachauswahl=de&mfDirect=true'
-#     url_buchen = 'https://otv.verwalt-berlin.de/ams/TerminBuchen/wizardng?sprachauswahl=de'
-#     url_info = 'https://otv.verwalt-berlin.de/ams/TerminBuchen/wizardng?dswid=6824&dsrid=30&sprachauswahl=de'
-#     url= 'https://otv.verwalt-berlin.de/ams/TerminBuchen/wizardng;jsessionid=MAjR5U1_oZW4bBVXQw5WEHd0MTXOGLcJKM6zE5EJ.frontend-2?dswid=2704&dsrid=207&sprachauswahl=de'
-
-#     res_start = requests.get(url_start, headers=headers)
-#     domain = res_start.cookies.list_domains()[0]
-#     JSESSIONID = res_start.cookies['JSESSIONID']
-#     SERVERID = res_start.cookies['SERVERID']
-#     TS018ca6c6 = res_start.cookies['TS018ca6c6']
-#     otv_neu = res_start.cookies['otv_neu']    
-    
-#     headers = { 
-#                 "User-Agent": user_agent,
-#                 "Cookie": f"check=valid; JSESSIONID={JSESSIONID}; SERVERID={SERVERID}; otv_neu={otv_neu}; TS018ca6c6={TS018ca6c6}",
-#                 "Host": "otv.verwalt-berlin.de", 
-#                 "Referer": url_start,
-#                 "Sec-Fetch-Dest": "document",
-#                 "Sec-Fetch-Mode": "navigate",
-#                 "Sec-Fetch-Site": "same-origin",
-#                 "Sec-Fetch-User": "?1",
-#                 "Upgrade-Insecure-Requests": "1",
-#                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-#                 "Accept-Encoding": "gzip, deflate, br",
-#                 "Accept-Language": "en-US,en;q=0.9,ko;q=0.8",
-
-#               }
-#     res_buchen = requests.get(url_buchen, headers=headers)
-#     print(res_buchen.url)
-#     # print(res_buchen.cookies)
-#     # res_buchen = requests.get(url_buchen, headers=headers, cookies=res_start.cookies)
-#     # print(res_buchen.cookies)
-#     # for res_buchen_cookie in res_buchen.cookies:
-#     #     print(res_buchen_cookie.name, res_buchen_cookie.value)
-
-#     # # print(res_buchen.text)
-#     # soup = bs4.BeautifulSoup(res_buchen.text, 'html.parser')
-#     # print(soup.text)
-
-# asession = AsyncHTMLSession()
-# # url_buchen = 'https://otv.verwalt-berlin.de/ams/TerminBuchen/wizardng?sprachauswahl=de&mfDirect=true'
-# url_buchen = 'https://otv.verwalt-berlin.de/ams/TerminBuchen/wizardng?sprachauswahl=de'
-# async def berlin_termin():
-#     r = await asession.get(url_buchen)
-#     return r
-
-# results = asession.run(berlin_termin)
-# for result in results:
-#     # print(result.html.url)
-#     # print(result.url)
-#     soup = bs4.BeautifulSoup(result.html.html, 'html.parser')
-#     print(soup.text)

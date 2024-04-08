@@ -5,9 +5,9 @@ URL_GO_GERMANY = 'https://go-germany-api.onrender.com/status'
 
 def ping():
     r1 = requests.get(URL_TERMIN_BOT)
-    # r2 = requests.get(URL_GO_GERMANY)    
+    r2 = requests.get(URL_GO_GERMANY)    
     print(r1)
-    # print(r2)
+    print(r2)
 
 if __name__ == '__main__':
     ping()
