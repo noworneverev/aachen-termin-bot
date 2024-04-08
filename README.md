@@ -1,5 +1,7 @@
 # Aachen Termin Bot 
 
+Official site: https://noworneverev.github.io/aachen-termin-bot/
+
 Smooth out your appointment scheduling experience in Aachen with the help of notifications from respective Telegram Channels.
 
 ## SuperC Termin
