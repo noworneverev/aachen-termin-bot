@@ -78,8 +78,8 @@ def aachen_termin():
         
         # get exact termin date
         soup = bs4.BeautifulSoup(res_4.text, 'html.parser')
-        div = soup.find("div", {"id": "sugg_accordion"}) # //*[@id="suggest_details_summary"]/text()
-        summary_text = soup.find('summary', id='suggest_details_summary').get_text(strip=True)
+        div = soup.find("div", {"id": "sugg_accordion"})
+        summary_tag = soup.find('summary', id='suggest_details_summary')
         
         if div:
             logging.info(f'{"Appointment available now in SuperC!"}')
@@ -88,7 +88,8 @@ def aachen_termin():
             for h in h3:
                 res += h.text + '\n'             
             return True, res[:-1]
-        elif summary_text:
+        elif summary_tag:
+            summary_text = summary_tag.get_text(strip=True)
             logging.info(f'{"Appointment available now in SuperC!"}')
             logging.info(f'{summary_text}')
             return True, 'New appointments are available now!\n' + summary_text
