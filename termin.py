@@ -139,7 +139,7 @@ def aachen_hbf_termin(team_name ,url_team):
             summary_text = summary_tag.get_text(strip=True)
             logging.info(f'Appointment available now at HBF {team_name}!')
             logging.info(f'{summary_text}')
-            return True, 'New appointments are available now!\n' + summary_text
+            return True, f'New appointments are available now at HBF {team_name}!\n' + summary_text
         else:
             logging.info(f'Cannot find sugg_accordion! Possible new appointments are available now at HBF {team_name}!')                
             return False, f"Cannot find sugg_accordion! Possible new appointments are available now at HBF {team_name}!"
