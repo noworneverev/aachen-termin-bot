@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 from flask import Flask
 from flask_apscheduler import APScheduler
-from termin import aachen_termin, aachen_an, Location
+from termin import superc_termin, aachen_an, Location, aachen_hbf_termin
 from utils import get_next_months
 
 class Config:
@@ -23,6 +23,7 @@ load_dotenv()
 TOKEN = os.getenv("TOKEN")
 # BOT_USERNAME: Final = '@aachen_termin_bot'
 CHANNEL_ID: Final = '@aachen_termin'
+HBF_CHANNEL_ID: Final = '@hbf_termin'
 URL: Final = 'https://aachen-termin-bot.onrender.com'
 
 # https://serviceportal.aachen.de/suche/-/vr-bis-detail/dienstleistung/5790/show
@@ -53,6 +54,12 @@ BAHNHOFPLATZ_CHANNEL_ID_10: Final = '-1001878260812'
 BAHNHOFPLATZ_CHANNEL_ID_11: Final = '-1001904052376'
 BAHNHOFPLATZ_CHANNEL_ID_12: Final = '-1001881457658'
 
+HBF_URL = {
+    'Team 1': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=88&select_cnc=1&cnc-270=0&cnc-271=0&cnc-264=1&cnc-267=0&cnc-268=0&cnc-272=0&cnc-255=0&cnc-269=0&cnc-262=0&cnc-256=0&cnc-253=0&cnc-254=0&cnc-274=0&cnc-252=0&cnc-258=0&cnc-257=0&cnc-260=0&cnc-263=0&cnc-259=0&cnc-249=0&cnc-250=0&cnc-261=0&cnc-266=0&cnc-265=0',
+    'Team 2': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=88&select_cnc=1&cnc-270=0&cnc-271=0&cnc-264=0&cnc-267=1&cnc-268=0&cnc-272=0&cnc-255=0&cnc-269=0&cnc-262=0&cnc-256=0&cnc-253=0&cnc-254=0&cnc-274=0&cnc-252=0&cnc-258=0&cnc-257=0&cnc-260=0&cnc-263=0&cnc-259=0&cnc-249=0&cnc-250=0&cnc-261=0&cnc-266=0&cnc-265=0',
+    'Team 3': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=88&select_cnc=1&cnc-270=0&cnc-271=0&cnc-264=0&cnc-267=0&cnc-268=1&cnc-272=0&cnc-255=0&cnc-269=0&cnc-262=0&cnc-256=0&cnc-253=0&cnc-254=0&cnc-274=0&cnc-252=0&cnc-258=0&cnc-257=0&cnc-260=0&cnc-263=0&cnc-259=0&cnc-249=0&cnc-250=0&cnc-261=0&cnc-266=0&cnc-265=0'
+}
+
 @app.route('/status')
 def status():    
     return 'OK'
@@ -69,9 +76,14 @@ def job1():
     
 
 def notify_aachen_termin(bot: telegram.Bot):
-    is_available, res = aachen_termin()
+    is_available, res = superc_termin()
     if is_available:
         bot.send_message(chat_id=CHANNEL_ID, text=res)  
+
+    for key, value in HBF_URL.items():
+        is_available, res = aachen_hbf_termin(key, value)
+        if is_available:
+            bot.send_message(chat_id=HBF_CHANNEL_ID, text=res)
 
 def notify_aachen_anmeldung(bot: telegram.Bot):
     next_months, next_years = get_next_months(4)

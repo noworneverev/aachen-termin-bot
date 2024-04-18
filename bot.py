@@ -2,7 +2,7 @@ from telegram.ext import CommandHandler, Updater
 from telegram import ParseMode
 from typing import Final
 import os
-from termin import aachen_termin
+from termin import superc_termin
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -16,11 +16,11 @@ def start_command(update, context):
     update.message.reply_text("Hello! Welcome to Aachen Termin Bot! Join the channel @aachen_termin to get notified when appointment is available!", parse_mode = ParseMode.HTML)
 
 def termin_command(update, context):
-    _, res = aachen_termin()
+    _, res = superc_termin()
     update.message.reply_text(res)    
 
 def termin_cron(context):
-    is_available, res = aachen_termin()
+    is_available, res = superc_termin()
     if is_available:
         context.bot.send_message(chat_id=CHANNEL_ID,text=res)
 
