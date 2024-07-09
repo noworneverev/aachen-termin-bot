@@ -66,11 +66,11 @@ def superc_termin():
     session.headers.update(headers)
 
     url_1 = 'https://termine.staedteregion-aachen.de/auslaenderamt/select2?md=1'
-    url_2 = 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=86&select_cnc=1&cnc-270=0&cnc-271=0&cnc-264=0&cnc-267=0&cnc-268=0&cnc-272=0&cnc-255=0&cnc-269=0&cnc-262=0&cnc-256=0&cnc-251=0&cnc-253=0&cnc-254=0&cnc-274=0&cnc-252=0&cnc-258=0&cnc-257=1&cnc-260=0&cnc-263=0&cnc-259=0&cnc-249=0&cnc-250=0&cnc-261=0&cnc-266=0&cnc-265=0'    
+    url_2 = 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-299=0&cnc-300=0&cnc-293=0&cnc-296=0&cnc-297=0&cnc-301=0&cnc-284=0&cnc-298=0&cnc-291=0&cnc-285=0&cnc-282=0&cnc-283=0&cnc-303=0&cnc-281=0&cnc-287=0&cnc-286=1&cnc-289=0&cnc-292=0&cnc-288=0&cnc-279=0&cnc-280=0&cnc-290=0&cnc-295=0&cnc-294=0'  
     url_3 = 'https://termine.staedteregion-aachen.de/auslaenderamt/suggest'
     res_1 = session.get(url_1)
     res_2 = session.get(url_2)
-    payload = {'loc':'35', 'gps_lat': '55.77858', 'gps_long': '65.07867', 'select_location': 'Ausländeramt Aachen - Außenstelle RWTH auswählen'}
+    payload = {'loc':'42', 'gps_lat': '55.77858', 'gps_long': '65.07867', 'select_location': 'Ausländeramt Aachen - Außenstelle RWTH auswählen'}
     res_3 = session.post(url_2, data=payload)
     res_4 = session.get(url_3)
     
@@ -100,10 +100,10 @@ def superc_termin():
         logging.info(f'{"No appointment is available in SuperC."}')                
         return False, "No appointment is available in SuperC"    
 
-hbf_url = {
-    'Team 1': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=88&select_cnc=1&cnc-270=0&cnc-271=0&cnc-264=1&cnc-267=0&cnc-268=0&cnc-272=0&cnc-255=0&cnc-269=0&cnc-262=0&cnc-256=0&cnc-253=0&cnc-254=0&cnc-274=0&cnc-252=0&cnc-258=0&cnc-257=0&cnc-260=0&cnc-263=0&cnc-259=0&cnc-249=0&cnc-250=0&cnc-261=0&cnc-266=0&cnc-265=0',
-    'Team 2': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=88&select_cnc=1&cnc-270=0&cnc-271=0&cnc-264=0&cnc-267=1&cnc-268=0&cnc-272=0&cnc-255=0&cnc-269=0&cnc-262=0&cnc-256=0&cnc-253=0&cnc-254=0&cnc-274=0&cnc-252=0&cnc-258=0&cnc-257=0&cnc-260=0&cnc-263=0&cnc-259=0&cnc-249=0&cnc-250=0&cnc-261=0&cnc-266=0&cnc-265=0',
-    'Team 3': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=88&select_cnc=1&cnc-270=0&cnc-271=0&cnc-264=0&cnc-267=0&cnc-268=1&cnc-272=0&cnc-255=0&cnc-269=0&cnc-262=0&cnc-256=0&cnc-253=0&cnc-254=0&cnc-274=0&cnc-252=0&cnc-258=0&cnc-257=0&cnc-260=0&cnc-263=0&cnc-259=0&cnc-249=0&cnc-250=0&cnc-261=0&cnc-266=0&cnc-265=0'
+hbf_url = {    
+    'Team 1': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-299=0&cnc-300=0&cnc-293=1&cnc-296=0&cnc-297=0&cnc-301=0&cnc-284=0&cnc-298=0&cnc-291=0&cnc-285=0&cnc-282=0&cnc-283=0&cnc-303=0&cnc-281=0&cnc-287=0&cnc-286=0&cnc-289=0&cnc-292=0&cnc-288=0&cnc-279=0&cnc-280=0&cnc-290=0&cnc-295=0&cnc-294=0',
+    'Team 2': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-299=0&cnc-300=0&cnc-293=0&cnc-296=1&cnc-297=0&cnc-301=0&cnc-284=0&cnc-298=0&cnc-291=0&cnc-285=0&cnc-282=0&cnc-283=0&cnc-303=0&cnc-281=0&cnc-287=0&cnc-286=0&cnc-289=0&cnc-292=0&cnc-288=0&cnc-279=0&cnc-280=0&cnc-290=0&cnc-295=0&cnc-294=0',
+    'Team 3': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-299=0&cnc-300=0&cnc-293=0&cnc-296=0&cnc-297=1&cnc-301=0&cnc-284=0&cnc-298=0&cnc-291=0&cnc-285=0&cnc-282=0&cnc-283=0&cnc-303=0&cnc-281=0&cnc-287=0&cnc-286=0&cnc-289=0&cnc-292=0&cnc-288=0&cnc-279=0&cnc-280=0&cnc-290=0&cnc-295=0&cnc-294=0'
 }
 
 def aachen_hbf_termin(team_name ,url_team):
@@ -117,7 +117,7 @@ def aachen_hbf_termin(team_name ,url_team):
     url_3 = 'https://termine.staedteregion-aachen.de/auslaenderamt/suggest'
     res_1 = session.get(url_1)
     res_2 = session.get(url_2)
-    payload = {'loc':'38', 'gps_lat': '55.77858', 'gps_long': '65.07867', 'select_location': 'Ausländeramt Aachen, 2. Etage auswählen'}
+    payload = {'loc':'45', 'gps_lat': '55.77858', 'gps_long': '65.07867', 'select_location': 'Ausländeramt Aachen, 2. Etage auswählen'}
     res_3 = session.post(url_2, data=payload)
     res_4 = session.get(url_3)
     
@@ -150,4 +150,4 @@ def aachen_hbf_termin(team_name ,url_team):
 
 # superc_termin()
 # for key, value in hbf_url.items():
-# aachen_hbf_termin(key, value)
+#     aachen_hbf_termin(key, value)
