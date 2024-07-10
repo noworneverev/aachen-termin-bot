@@ -65,12 +65,33 @@ def superc_termin():
     session = requests.Session()
     session.headers.update(headers)
 
-    url_1 = 'https://termine.staedteregion-aachen.de/auslaenderamt/select2?md=1'
-    url_2 = 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-299=0&cnc-300=0&cnc-293=0&cnc-296=0&cnc-297=0&cnc-301=0&cnc-284=0&cnc-298=0&cnc-291=0&cnc-285=0&cnc-282=0&cnc-283=0&cnc-303=0&cnc-281=0&cnc-287=0&cnc-286=1&cnc-289=0&cnc-292=0&cnc-288=0&cnc-279=0&cnc-280=0&cnc-290=0&cnc-295=0&cnc-294=0'  
+    url_1 = 'https://termine.staedteregion-aachen.de/auslaenderamt/select2?md=1'        
+    url_2 = ''
     url_3 = 'https://termine.staedteregion-aachen.de/auslaenderamt/suggest'
     res_1 = session.get(url_1)
+
+    # Get RWTH cnc id
+    soup = bs4.BeautifulSoup(res_1.content, 'html.parser')         
+    header_element = soup.find('h3', string=lambda s: 'Super C' in s if s else False)
+    
+    if header_element:        
+        next_sibling = header_element.find_next_sibling()
+        if next_sibling:
+            li_elements = next_sibling.find_all('li')
+            cnc_id = li_elements[0].get('id').split('-')[-1] if li_elements else None
+            url_2 = f'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-{cnc_id}=1'
+            logging.info(f'{"Super C cnc id: " + cnc_id}')
+    else:
+        logging.info("Element containing 'Super C' not found.")
+        return False, "Element containing 'Super C' not found."
+        
     res_2 = session.get(url_2)
-    payload = {'loc':'42', 'gps_lat': '55.77858', 'gps_long': '65.07867', 'select_location': 'Ausländeramt Aachen - Außenstelle RWTH auswählen'}
+
+    soup = bs4.BeautifulSoup(res_2.content, 'html.parser')
+    loc = soup.find('input', {'name': 'loc'}).get('value')
+    logging.info(f'{"Super C loc: " + loc}')
+
+    payload = {'loc':str(loc), 'gps_lat': '55.77858', 'gps_long': '65.07867', 'select_location': 'Ausländeramt Aachen - Außenstelle RWTH auswählen'}
     res_3 = session.post(url_2, data=payload)
     res_4 = session.get(url_3)
     
@@ -100,24 +121,48 @@ def superc_termin():
         logging.info(f'{"No appointment is available in SuperC."}')                
         return False, "No appointment is available in SuperC"    
 
-hbf_url = {    
-    'Team 1': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-299=0&cnc-300=0&cnc-293=1&cnc-296=0&cnc-297=0&cnc-301=0&cnc-284=0&cnc-298=0&cnc-291=0&cnc-285=0&cnc-282=0&cnc-283=0&cnc-303=0&cnc-281=0&cnc-287=0&cnc-286=0&cnc-289=0&cnc-292=0&cnc-288=0&cnc-279=0&cnc-280=0&cnc-290=0&cnc-295=0&cnc-294=0',
-    'Team 2': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-299=0&cnc-300=0&cnc-293=0&cnc-296=1&cnc-297=0&cnc-301=0&cnc-284=0&cnc-298=0&cnc-291=0&cnc-285=0&cnc-282=0&cnc-283=0&cnc-303=0&cnc-281=0&cnc-287=0&cnc-286=0&cnc-289=0&cnc-292=0&cnc-288=0&cnc-279=0&cnc-280=0&cnc-290=0&cnc-295=0&cnc-294=0',
-    'Team 3': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-299=0&cnc-300=0&cnc-293=0&cnc-296=0&cnc-297=1&cnc-301=0&cnc-284=0&cnc-298=0&cnc-291=0&cnc-285=0&cnc-282=0&cnc-283=0&cnc-303=0&cnc-281=0&cnc-287=0&cnc-286=0&cnc-289=0&cnc-292=0&cnc-288=0&cnc-279=0&cnc-280=0&cnc-290=0&cnc-295=0&cnc-294=0'
-}
+# hbf_url = {    
+#     'Team 1': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-293=1',
+#     'Team 2': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-296=1',
+#     'Team 3': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-297=1'
+# }
 
-def aachen_hbf_termin(team_name ,url_team):
+def get_hbf_url(res_1, team_name):    
+    soup = bs4.BeautifulSoup(res_1.content, 'html.parser')         
+    header_element = soup.find('h3', string=lambda s: 'Aufenthalt' in s if s else False)
+    url_2 = ''
+    li_index = int(team_name.split(' ')[-1]) - 1
+    if header_element:        
+        next_sibling = header_element.find_next_sibling()
+        if next_sibling:
+            li_elements = next_sibling.find_all('li')
+            cnc_id = li_elements[li_index].get('id').split('-')[-1] if li_elements else None
+            url_2 = f'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-{cnc_id}=1'
+            logging.info(f"Aufenthalt {team_name} cnc id: {cnc_id}")
+    else:
+        logging.info("Element containing 'Aufenthalt' not found.")        
+
+    return url_2
+
+def aachen_hbf_termin(team_name):
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"    
     headers = {"User-Agent": user_agent}
     session = requests.Session()
     session.headers.update(headers)
 
     url_1 = 'https://termine.staedteregion-aachen.de/auslaenderamt/select2?md=1'
-    url_2 = url_team
+    url_2 = ''    
     url_3 = 'https://termine.staedteregion-aachen.de/auslaenderamt/suggest'
     res_1 = session.get(url_1)
+
+    url_2 = get_hbf_url(res_1, team_name)
+
     res_2 = session.get(url_2)
-    payload = {'loc':'45', 'gps_lat': '55.77858', 'gps_long': '65.07867', 'select_location': 'Ausländeramt Aachen, 2. Etage auswählen'}
+    soup = bs4.BeautifulSoup(res_2.content, 'html.parser')
+    loc = soup.find('input', {'name': 'loc'}).get('value')
+    logging.info(f"Aufenthalt {team_name} loc: {loc}")
+
+    payload = {'loc':str(loc), 'gps_lat': '55.77858', 'gps_long': '65.07867', 'select_location': 'Ausländeramt Aachen, 2. Etage auswählen'}
     res_3 = session.post(url_2, data=payload)
     res_4 = session.get(url_3)
     
@@ -149,5 +194,8 @@ def aachen_hbf_termin(team_name ,url_team):
 
 
 # superc_termin()
+# aachen_hbf_termin('Team 1')
+# aachen_hbf_termin('Team 2')
+# aachen_hbf_termin('Team 3')
 # for key, value in hbf_url.items():
 #     aachen_hbf_termin(key, value)
