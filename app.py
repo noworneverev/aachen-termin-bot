@@ -7,6 +7,7 @@ from flask import Flask
 from flask_apscheduler import APScheduler
 from termin import superc_termin, aachen_an, Location, aachen_hbf_termin
 from utils import get_next_months
+from munich_termin import munich_notfall_termin
 
 class Config:
     SCHEDULER_API_ENABLED = True
@@ -24,9 +25,8 @@ TOKEN = os.getenv("TOKEN")
 # BOT_USERNAME: Final = '@aachen_termin_bot'
 CHANNEL_ID: Final = '@aachen_termin'
 HBF_CHANNEL_ID: Final = '@hbf_termin'
+MUNICH_NOTFALL_TERMIN: Final = '@munich_notfall_termin'
 URL: Final = 'https://aachen-termin-bot.onrender.com'
-
-# https://serviceportal.aachen.de/suche/-/vr-bis-detail/dienstleistung/5790/show
 
 KATSCHHOF_CHANNEL_ID_01: Final = '-1001917130132'
 KATSCHHOF_CHANNEL_ID_02: Final = '-1001929585127'
@@ -73,7 +73,7 @@ def job1():
     bot = telegram.Bot(token=TOKEN)
     notify_aachen_termin(bot)
     notify_aachen_anmeldung(bot)
-    
+    notify_munich_notfalltermin(bot)    
 
 def notify_aachen_termin(bot: telegram.Bot):
     is_available, res = superc_termin()
@@ -95,6 +95,11 @@ def notify_anmeldung_by_month_and_location(bot: telegram.Bot, year: str, month: 
     is_available, res = aachen_an(loc, year, month)
     if is_available:
         bot.send_message(chat_id=get_channel_id(loc, month), text=res)
+
+def notify_munich_notfalltermin(bot: telegram.Bot):
+    is_available, res = munich_notfall_termin()
+    if is_available:
+        bot.send_message(chat_id=MUNICH_NOTFALL_TERMIN, text=res)
 
 def get_channel_id(loc: Location, month: str):
     month_dict = {}
