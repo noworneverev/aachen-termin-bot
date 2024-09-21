@@ -69,7 +69,7 @@ def hello_world():
 @scheduler.task('interval', id='do_job_1', seconds=300, misfire_grace_time=900)
 def job1():    
     bot = telegram.Bot(token=TOKEN)
-    notify_aachen_termin(bot)
+    # notify_aachen_termin(bot)
     notify_aachen_anmeldung(bot)    
 
 def notify_aachen_termin(bot: telegram.Bot):
