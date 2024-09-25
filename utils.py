@@ -21,11 +21,32 @@ def get_next_months(num_months):
 
     return months, years
 
-if __name__ == "__main__":
-    next_months, next_years = get_next_months(4)  # Change the argument to get more or fewer months
-    print(next_years)
+def is_date_within_n_days(date_string: str, days: int) -> bool:
+    """
+    Extract the date from the string and check if it is within a given number of days from today.
+    
+    Args:
+    date_string (str): The input string containing a date in the format 'Day, dd.mm.yyyy'.
+    days (int): The number of days to compare with.
+    
+    Returns:
+    bool: True if the date is within the specified number of days from today, False otherwise.
+    """
+    from datetime import datetime
+    
+    date_format = "%d.%m.%Y"
+    extracted_date = datetime.strptime(date_string.split(", ")[1], date_format)
+    
+    today = datetime.today()
+    
+    date_difference = abs((extracted_date - today).days)
+    
+    return date_difference < days
 
-    # for month, year in zip(next_months, next_years):
-    #     print(f"{month} {year}")    
-        # month_name = datetime.date(int(year), int(month), 1).strftime('%B')
-        # print(f"{month_name} {year}")
+# Example usage
+# is_date_within_n_days("Mittwoch, 04.11.2024", 50)
+
+
+if __name__ == "__main__":
+    next_months, next_years = get_next_months(4) 
+    print(next_years)

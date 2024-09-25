@@ -2,6 +2,7 @@ import requests
 import logging
 import bs4
 import enum
+from utils import is_date_within_n_days
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -59,6 +60,75 @@ def number_to_month(number):
     
     return month_dict.get(number, "Invalid Month")
 
+def abholung_termin():
+    # The structure of the code is exactly the same as superc_termin, I'm just too lazy to refactor it.
+    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"    
+    headers = {"User-Agent": user_agent}
+    session = requests.Session()
+    session.headers.update(headers)
+
+    url_1 = 'https://termine.staedteregion-aachen.de/auslaenderamt/select2?md=1'        
+    url_2 = ''
+    url_3 = 'https://termine.staedteregion-aachen.de/auslaenderamt/suggest'
+    res_1 = session.get(url_1)
+
+    # Get RWTH cnc id
+    soup = bs4.BeautifulSoup(res_1.content, 'html.parser')         
+    header_element = soup.find('h3', string=lambda s: 'Abholung' in s if s else False)
+
+    if header_element:        
+        next_sibling = header_element.find_next_sibling()
+        if next_sibling:
+            li_elements = next_sibling.find_all('li')
+            cnc_id = li_elements[0].get('id').split('-')[-1] if li_elements else None
+            url_2 = f'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-{cnc_id}=1'
+            logging.info(f'{"Abholung cnc id: " + cnc_id}')
+    else:
+        logging.info("Element containing 'Abholung' not found.")
+        return False, "Element containing 'Abholung' not found."
+    
+    res_2 = session.get(url_2)
+
+    soup = bs4.BeautifulSoup(res_2.content, 'html.parser')
+    loc = soup.find('input', {'name': 'loc'}).get('value')
+    logging.info(f'{"Abholung loc: " + loc}')
+
+    payload = {'loc':str(loc), 'gps_lat': '55.77858', 'gps_long': '65.07867', 'select_location': 'Ausländeramt Aachen - Aachen Arkaden, Trierer Straße 1, Aachen auswählen'}
+    res_3 = session.post(url_2, data=payload)
+    res_4 = session.get(url_3)
+    
+    if "Kein freier Termin verfügbar" not in res_4.text:        
+        
+        # get exact termin date
+        soup = bs4.BeautifulSoup(res_4.text, 'html.parser')
+        div = soup.find("div", {"id": "sugg_accordion"})
+        summary_tag = soup.find('summary', id='suggest_details_summary')
+        
+        if div:
+            logging.info(f'{"Appointment available now in Abholung Aufenthaltserlaubnis!"}')
+            h3 = div.find_all("h3")
+            res = 'New appointments are available now!\n'
+            flag = False
+            for h in h3:
+                if is_date_within_n_days(h.text, 50):
+                    res += h.text + '\n'
+                    flag = True
+            if not flag:
+                logging.info(f'{"There are appointments available, but they are not within 50 days from today."}')
+                return False, "There are appointments available, but they are not within 50 days from today."
+            return True, res[:-1]
+        elif summary_tag:
+            summary_text = summary_tag.get_text(strip=True)
+            logging.info(f'{"Appointment available now in Abholung Aufenthaltserlaubnis!"}')
+            logging.info(f'{summary_text}')
+            return True, 'New appointments are available now!\n' + summary_text
+        else:
+            logging.info(f'{"Cannot find sugg_accordion! Possible new appointments are available now in Abholung Aufenthaltserlaubnis!"}')                
+            return False, "Cannot find sugg_accordion! Possible new appointments are available now!"
+    else:
+        logging.info(f'{"No appointment is available in Abholung Aufenthaltserlaubnis."}')                
+        return False, "No appointment is available in Abholung Aufenthaltserlaubnis"
+    
 def superc_termin():
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"    
     headers = {"User-Agent": user_agent}
