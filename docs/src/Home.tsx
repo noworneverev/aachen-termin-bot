@@ -195,6 +195,128 @@ const Home = () => {
         <Grid.Row>
           <Grid.Column>
             <Header as="h1" dividing>
+              FH Aachen Termin
+            </Header>
+
+            <Message info>
+              <p>
+                This channel is exclusively for students of FH Aachen who are
+                applying for visa extensions. Instant notifications will be sent
+                to the channel once appointment slots become available.
+              </p>
+              <p>
+                FH Aachen Termin Link (Fachhochschule Aachen):{" "}
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://termine.staedteregion-aachen.de/auslaenderamt/"
+                >
+                  https://termine.staedteregion-aachen.de/auslaenderamt/
+                </a>
+              </p>
+            </Message>
+            <Grid.Column width={16}>
+              <Table celled structured>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell rowSpan="2">
+                      Telegram Channel Name
+                    </Table.HeaderCell>
+                    <Table.HeaderCell rowSpan="2">Invite Link</Table.HeaderCell>
+                    <Table.HeaderCell rowSpan="2">QR Code</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+
+                <Table.Body>
+                  <Table.Row>
+                    <Table.Cell>FH Aachen Termin</Table.Cell>
+                    <Table.Cell>
+                      <a
+                        target="_blank"
+                        rel="noreferrer"
+                        href="https://t.me/+sCtrviN5NNw2YzBi"
+                      >
+                        https://t.me/+sCtrviN5NNw2YzBi
+                      </a>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <ModalContentImage
+                        imageUrl="./static/fh.png"
+                        description="FH Aachen Termin"
+                      />
+                    </Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+              </Table>
+            </Grid.Column>
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row>
+          <Grid.Column>
+            <Header as="h1" dividing>
+              Abholung Aufenthaltserlaubnis Termin
+            </Header>
+
+            <Message info>
+              <p>
+                This channel is for Abholung Aufenthaltserlaubnis. Instant
+                notifications will be sent to the channel once appointment slots
+                become available.
+              </p>
+              <p>
+                Abholung Aufenthaltserlaubnis Termin Link (Abholung):{" "}
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://termine.staedteregion-aachen.de/auslaenderamt/"
+                >
+                  https://termine.staedteregion-aachen.de/auslaenderamt/
+                </a>
+              </p>
+            </Message>
+            <Grid.Column width={16}>
+              <Table celled structured>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell rowSpan="2">
+                      Telegram Channel Name
+                    </Table.HeaderCell>
+                    <Table.HeaderCell rowSpan="2">Invite Link</Table.HeaderCell>
+                    <Table.HeaderCell rowSpan="2">QR Code</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+
+                <Table.Body>
+                  <Table.Row>
+                    <Table.Cell>
+                      Abholung Aufenthaltserlaubnis Termin
+                    </Table.Cell>
+                    <Table.Cell>
+                      <a
+                        target="_blank"
+                        rel="noreferrer"
+                        href="https://t.me/+1EGm6-NDQGM2ODAy"
+                      >
+                        https://t.me/+1EGm6-NDQGM2ODAy
+                      </a>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <ModalContentImage
+                        imageUrl="./static/abholung.png"
+                        description="Abholung Aufenthaltserlaubnis Termin"
+                      />
+                    </Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+              </Table>
+            </Grid.Column>
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row>
+          <Grid.Column>
+            <Header as="h1" dividing>
               Aachen Wohnsitz an-/ ab-/ ummelden Termin
             </Header>
 
