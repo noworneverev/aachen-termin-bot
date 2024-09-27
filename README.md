@@ -60,5 +60,6 @@ Every month has its own channel. Join the respective channels below to receive i
   - Termin in December: [https://t.me/+L6l4eytXD9cyZGNi](https://t.me/+L6l4eytXD9cyZGNi)
 
 ## Donate
-If you find this project helpful, consider buying me a coffee ☕️    
+If you find this project helpful, consider buying me a coffee ☕️ Your support is greatly appreciated!  
+Special thanks to all the amazing donors who have contributed to the project ❤️.
 [paypal.me/liaoyanying](https://www.paypal.me/liaoyanying)
