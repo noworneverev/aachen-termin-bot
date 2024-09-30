@@ -119,9 +119,13 @@ def abholung_termin():
             return True, res[:-1]
         elif summary_tag:
             summary_text = summary_tag.get_text(strip=True)
-            logging.info(f'{"Appointment available now in Abholung Aufenthaltserlaubnis!"}')
-            logging.info(f'{summary_text}')
-            return True, 'New appointments are available now!\n' + summary_text
+            if is_date_within_n_days(summary_text, 50):                
+                logging.info(f'{"Appointment available now in Abholung Aufenthaltserlaubnis!"}')
+                logging.info(f'{summary_text}')
+                return True, 'New appointments are available now!\n' + summary_text
+            else:
+                logging.info(f'{"There are appointments available, but they are not within 50 days from today."}')
+                return False, "There are appointments available, but they are not within 50 days from today."            
         else:
             logging.info(f'{"Cannot find sugg_accordion! Possible new appointments are available now in Abholung Aufenthaltserlaubnis!"}')                
             return False, "Cannot find sugg_accordion! Possible new appointments are available now!"
@@ -129,6 +133,7 @@ def abholung_termin():
         logging.info(f'{"No appointment is available in Abholung Aufenthaltserlaubnis."}')                
         return False, "No appointment is available in Abholung Aufenthaltserlaubnis"
     
+abholung_termin()
 def superc_termin():
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"    
     headers = {"User-Agent": user_agent}
