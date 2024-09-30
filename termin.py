@@ -133,7 +133,6 @@ def abholung_termin():
         logging.info(f'{"No appointment is available in Abholung Aufenthaltserlaubnis."}')                
         return False, "No appointment is available in Abholung Aufenthaltserlaubnis"
     
-abholung_termin()
 def superc_termin():
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"    
     headers = {"User-Agent": user_agent}
