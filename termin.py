@@ -141,7 +141,6 @@ def abholung_termin():
             return True, res[:-1]
         elif summary_tag:
             summary_text = summary_tag.get_text(strip=True)
-            print(summary_text)
             if is_date_within_n_days(summary_text, 50):                
                 logging.info(f'{"Appointment available now in Abholung Aufenthaltserlaubnis!"}')
                 logging.info(f'{summary_text}')
