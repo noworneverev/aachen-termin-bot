@@ -129,7 +129,7 @@ def abholung_termin():
         if div:
             logging.info(f'{"Appointment available now in Abholung Aufenthaltserlaubnis!"}')
             h3 = div.find_all("h3")
-            res = 'New appointments are available now!\n'
+            res = 'New appointments are available now\n'
             flag = False
             for h in h3:
                 if is_date_within_n_days(h.text, 50):
@@ -144,13 +144,13 @@ def abholung_termin():
             if is_date_within_n_days(summary_text, 50):                
                 logging.info(f'{"Appointment available now in Abholung Aufenthaltserlaubnis!"}')
                 logging.info(f'{summary_text}')
-                return True, 'New appointments are available now!\n' + summary_text
+                return True, 'New appointments are available now\n' + summary_text
             else:
                 logging.info(f'{"There are appointments available, but they are not within 50 days from today."}')
                 return False, "There are appointments available, but they are not within 50 days from today."            
         else:
             logging.info(f'{"Cannot find sugg_accordion! Possible new appointments are available now in Abholung Aufenthaltserlaubnis!"}')                
-            return False, "Cannot find sugg_accordion! Possible new appointments are available now!"
+            return False, "Cannot find sugg_accordion! Possible new appointments are available now"
     else:
         logging.info(f'{"No appointment is available in Abholung Aufenthaltserlaubnis."}')                
         return False, "No appointment is available in Abholung Aufenthaltserlaubnis"
@@ -209,7 +209,7 @@ def superc_termin(form_pos: int = 0):
             # logging.info(f'{"Appointment available now in SuperC!"}')
             logging.info(f"Appointments found for {form_label} at SuperC!")
             h3 = div.find_all("h3")
-            # res = 'New appointments are available now!\n'
+            # res = 'New appointments are available now\n'
             res = f'New appointments available for {form_label}:\n'
             for h in h3:
                 res += h.text + '\n'             
@@ -221,7 +221,7 @@ def superc_termin(form_pos: int = 0):
             return True, f'Available slots for {form_label}:\n{summary_text}'
         else:
             logging.info(f'{"Cannot find sugg_accordion! Possible new appointments are available now in SuperC!"}')                
-            return False, "Cannot find sugg_accordion! Possible new appointments are available now!"
+            return False, "Cannot find sugg_accordion! Possible new appointments are available now"
     else:        
         logging.info(f"No appointments available for {form_label} at SuperC")       
         return False, f"No available slots for {form_label} at this time"
@@ -272,7 +272,7 @@ def fh_termin():
         if div:
             logging.info(f'{"Appointment available now in Fachhochschule Aachen!"}')
             h3 = div.find_all("h3")
-            res = 'New appointments are available now!\n'
+            res = 'New appointments are available now\n'
             for h in h3:
                 res += h.text + '\n'             
             return True, res[:-1]
@@ -280,10 +280,10 @@ def fh_termin():
             summary_text = summary_tag.get_text(strip=True)
             logging.info(f'{"Appointment available now in Fachhochschule Aachen!"}')
             logging.info(f'{summary_text}')
-            return True, 'New appointments are available now!\n' + summary_text
+            return True, 'New appointments are available now\n' + summary_text
         else:
             logging.info(f'{"Cannot find sugg_accordion! Possible new appointments are available now in Fachhochschule Aachen!"}')                
-            return False, "Cannot find sugg_accordion! Possible new appointments are available now!"
+            return False, "Cannot find sugg_accordion! Possible new appointments are available now"
     else:
         logging.info(f'{"No appointment is available in Fachhochschule Aachen."}')                
         return False, "No appointment is available in Fachhochschule Aachen"
