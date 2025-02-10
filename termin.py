@@ -342,19 +342,19 @@ def aachen_hbf_termin(team_name):
         
         if div:
             h3 = div.find_all("h3")
-            res = f'New appointments are available now at HBF {team_name}!\n'
+            res = f'New appointments are available now at HBF {team_name}\n'
             for h in h3:
                 res += h.text + '\n'             
             logging.info(res[:-1])
             return True, res[:-1]
         elif summary_tag:
             summary_text = summary_tag.get_text(strip=True)
-            logging.info(f'Appointment available now at HBF {team_name}!')
+            logging.info(f'Appointment available now at HBF {team_name}')
             logging.info(f'{summary_text}')
-            return True, f'New appointments are available now at HBF {team_name}!\n' + summary_text
+            return True, f'New appointments are available now at HBF {team_name}\n' + summary_text
         else:
-            logging.info(f'Cannot find sugg_accordion! Possible new appointments are available now at HBF {team_name}!')                
-            return False, f"Cannot find sugg_accordion! Possible new appointments are available now at HBF {team_name}!"
+            logging.info(f'Cannot find sugg_accordion! Possible new appointments are available now at HBF {team_name}')                
+            return False, f"Cannot find sugg_accordion! Possible new appointments are available now at HBF {team_name}"
     else:
         logging.info(f'No appointment is available at HBF {team_name}.')                
         return False, f'No appointment is available at HBF {team_name}.'   
