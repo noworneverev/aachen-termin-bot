@@ -82,8 +82,8 @@ def format_url_2(soup: bs4.BeautifulSoup, needle: str, form_options_position: in
         if next_sibling:
             li_elements = next_sibling.find_all("li")
             cnc_id = li_elements[form_options_position].get("id").split("-")[-1] if li_elements else None
-            url_2 = f"{url_base}&cnc-{cnc_id}=1"
-            logging.info(f'{f"'{needle}' has cnc id: " + cnc_id}')
+            url_2 = f"{url_base}&cnc-{cnc_id}=1"            
+            logging.info(f"{f'{needle} has cnc id: ' + cnc_id}")
             return True, url_2
         else:
             return False, f"Sibling element to h3 with '{needle}' not found."
@@ -160,6 +160,19 @@ def superc_termin(form_pos: int = 0):
     
     param: form_pos: There are 3 Anliegen to select. 0 for students, 1 for family, 2 for employees. 
     """
+    form_labels = {
+        0: "RWTH Studenten (Students)",
+        1: "RWTH Familienangehörige (Family Members)",
+        2: "RWTH Mitarbeitende & Forschende (Employees/Researchers)"
+    }
+
+    if form_pos not in form_labels:
+        logging.error(f"Invalid form_pos: {form_pos}. Must be 0, 1, or 2")
+        return False, "Invalid request type"
+    
+    form_label = form_labels[form_pos]
+    logging.info(f"Checking SuperC appointments for: {form_label}")
+
     headers = {"User-Agent": USER_AGENT_STRING}
     session = requests.Session()
     session.headers.update(headers)
@@ -193,23 +206,25 @@ def superc_termin(form_pos: int = 0):
         summary_tag = soup.find('summary', id='suggest_details_summary')
         
         if div:
-            logging.info(f'{"Appointment available now in SuperC!"}')
+            # logging.info(f'{"Appointment available now in SuperC!"}')
+            logging.info(f"Appointments found for {form_label} at SuperC!")
             h3 = div.find_all("h3")
-            res = 'New appointments are available now!\n'
+            # res = 'New appointments are available now!\n'
+            res = f'New appointments available for {form_label}:\n'
             for h in h3:
                 res += h.text + '\n'             
             return True, res[:-1]
         elif summary_tag:
             summary_text = summary_tag.get_text(strip=True)
-            logging.info(f'{"Appointment available now in SuperC!"}')
-            logging.info(f'{summary_text}')
-            return True, 'New appointments are available now!\n' + summary_text
+            logging.info(f'{"Appointment available now in SuperC!"}')            
+            logging.info(f"Immediate availability for {form_label} at SuperC!")
+            return True, f'Available slots for {form_label}:\n{summary_text}'
         else:
             logging.info(f'{"Cannot find sugg_accordion! Possible new appointments are available now in SuperC!"}')                
             return False, "Cannot find sugg_accordion! Possible new appointments are available now!"
-    else:
-        logging.info(f'{"No appointment is available in SuperC."}')                
-        return False, "No appointment is available in SuperC"    
+    else:        
+        logging.info(f"No appointments available for {form_label} at SuperC")       
+        return False, f"No available slots for {form_label} at this time"
 
 def fh_termin():
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"    
@@ -345,7 +360,7 @@ def aachen_hbf_termin(team_name):
         return False, f'No appointment is available at HBF {team_name}.'   
 
 
-# superc_termin()
+superc_termin(1)
 # aachen_hbf_termin('Team 1')
 # aachen_hbf_termin('Team 2')
 # aachen_hbf_termin('Team 3')
