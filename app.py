@@ -81,7 +81,7 @@ def job1():
 def notify_abholung(bot: telegram.Bot):
     is_available, res = abholung_termin()
     if is_available:
-        text = f"{res}\n\n[Check now]({APPOINTMENT_LINK})"
+        text = f"{res}\n[👉 Book Now\!]({APPOINTMENT_LINK})"
         text = text.replace(".", "\.")
         bot.send_message(chat_id=ABHOLUNG_CHANNEL_ID, text=text, parse_mode='MarkdownV2')
 
@@ -93,21 +93,21 @@ def notify_aachen_termin(bot: telegram.Bot):
     for pos in [0,1,2]:
         is_available, res = superc_termin(pos)
         if is_available:            
-            text = f"{res}\n\n[Check now]({APPOINTMENT_LINK})"
+            text = f"{res}\n[👉 Book Now\!]({APPOINTMENT_LINK})"
             text = text.replace(".", "\.")
             bot.send_message(chat_id=CHANNEL_ID, text=text, parse_mode='MarkdownV2')
     
     for team in ['Team 1', 'Team 2', 'Team 3']:
         is_available, res = aachen_hbf_termin(team)
         if is_available:
-            text = f"{res}\n\n[Check now]({APPOINTMENT_LINK})"
+            text = f"{res}\n[👉 Book Now\!]({APPOINTMENT_LINK})"
             text = text.replace(".", "\.")
             bot.send_message(chat_id=HBF_CHANNEL_ID, text=text, parse_mode='MarkdownV2')
     
     
     is_available, res = fh_termin()
     if is_available:
-        text = f"{res}\n\n[Check now]({APPOINTMENT_LINK})"
+        text = f"{res}\n[👉 Check now]({APPOINTMENT_LINK})"
         text = text.replace(".", "\.")
         bot.send_message(chat_id=FH_AACHEN_CHANNEL_ID, text=text, parse_mode='MarkdownV2')
 
