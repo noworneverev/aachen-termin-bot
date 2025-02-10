@@ -82,14 +82,19 @@ def notify_abholung(bot: telegram.Bot):
         bot.send_message(chat_id=ABHOLUNG_CHANNEL_ID, text=res)
 
 def notify_aachen_termin(bot: telegram.Bot):
-    is_available, res = superc_termin()
+
+    # TODO ONE COULD POSSIBLY NOTIFY ABOUT OTHER APPOINTMENT TYPES
+    # HOWEVER I AM NOT SURE IF THE SLOTS ARE SHARED BETWEEN TYPES
+    # THIS SYSTEM HECKING SUCKS
+    is_available, res = superc_termin(0)
     if is_available:
-        bot.send_message(chat_id=CHANNEL_ID, text=res)  
+        bot.send_message(chat_id=CHANNEL_ID, text=res)
     
     for team in ['Team 1', 'Team 2', 'Team 3']:
         is_available, res = aachen_hbf_termin(team)
         if is_available:
             bot.send_message(chat_id=HBF_CHANNEL_ID, text=res)
+    
     
     is_available, res = fh_termin()
     if is_available:
