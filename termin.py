@@ -161,9 +161,9 @@ def superc_termin(form_pos: int = 0):
     param: form_pos: There are 3 Anliegen to select. 0 for students, 1 for family, 2 for employees. 
     """
     form_labels = {
-        0: "RWTH Studenten (Students)",
-        1: "RWTH Familienangehörige (Family Members)",
-        2: "RWTH Mitarbeitende & Forschende (Employees/Researchers)"
+        0: "RWTH Studenten",
+        1: "RWTH Familienangehörige",
+        2: "RWTH Mitarbeitende & Forschende"
     }
 
     if form_pos not in form_labels:
@@ -360,7 +360,7 @@ def aachen_hbf_termin(team_name):
         return False, f'No appointment is available at HBF {team_name}.'   
 
 
-superc_termin(1)
+# superc_termin(1)
 # aachen_hbf_termin('Team 1')
 # aachen_hbf_termin('Team 2')
 # aachen_hbf_termin('Team 3')
