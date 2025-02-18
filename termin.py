@@ -218,7 +218,7 @@ def superc_termin(form_pos: int = 0):
             summary_text = summary_tag.get_text(strip=True)
             logging.info(f'{"Appointment available now in SuperC!"}')            
             logging.info(f"Immediate availability for {form_label} at SuperC!")
-            return True, f'Available slots for {form_label}:\n{summary_text}'
+            return True, f'{form_label}:\n{summary_text}'
         else:
             logging.info(f'{"Cannot find sugg_accordion! Possible new appointments are available now in SuperC!"}')                
             return False, "Cannot find sugg_accordion! Possible new appointments are available now"
@@ -342,7 +342,7 @@ def aachen_hbf_termin(team_name):
         
         if div:
             h3 = div.find_all("h3")
-            res = f'New appointments are available now at HBF {team_name}\n'
+            res = f'{team_name}\n'
             for h in h3:
                 res += h.text + '\n'             
             logging.info(res[:-1])
@@ -351,7 +351,7 @@ def aachen_hbf_termin(team_name):
             summary_text = summary_tag.get_text(strip=True)
             logging.info(f'Appointment available now at HBF {team_name}')
             logging.info(f'{summary_text}')
-            return True, f'New appointments are available now at HBF {team_name}\n' + summary_text
+            return True, f'{team_name}\n' + summary_text
         else:
             logging.info(f'Cannot find sugg_accordion! Possible new appointments are available now at HBF {team_name}')                
             return False, f"Cannot find sugg_accordion! Possible new appointments are available now at HBF {team_name}"
