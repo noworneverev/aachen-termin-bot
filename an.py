@@ -50,7 +50,9 @@ def get_appointments() -> list[Appointment]:
     response = requests.get(domain + "/m/buergerservice/extern/calendar/?uid=15940648-b483-46d9-819e-285707f1fc34",
                             allow_redirects=False)
     # Base url should return 302 with 'wsid' as a parameter in the url
-    if response.status_code != 302:
+    print(response)
+    print(response.headers)
+    if response.status_code != 302:        
         print("Couldn't get wsid token")
         exit()
     
@@ -137,7 +139,7 @@ def notify_aachen_anmeldung(bot):
             bot.send_message(chat_id=channel_id, text=text)
 
 
-# notify_aachen_anmeldung(None)
+notify_aachen_anmeldung(None)
     # for a in sorted(get_appointments(), key=(lambda x : x.date_time)):
     #     print(a)
 
