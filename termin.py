@@ -2,8 +2,7 @@ import requests
 from typing import Final
 import logging
 import bs4
-import enum
-from utils import is_date_within_n_days
+from utils import is_date_within_n_days, Location
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -13,10 +12,6 @@ User agent string for looking for Termine.
 USER_AGENT_STRING: Final = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
 )
-
-class Location(enum.Enum):    
-    Katschhof = "Bürgerservice Katschhof"
-    Bahnhofplatz = "Bürgerservice Bahnhofplatz"
 
 def aachen_an(loc: Location, year: str, month: str):
     url = ""
