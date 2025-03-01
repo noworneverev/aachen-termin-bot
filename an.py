@@ -46,8 +46,14 @@ def enable_debug():
 
 
 def get_appointments() -> list[Appointment]:
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    }
     domain = "https://stadt-aachen.saas.smartcjm.com"
     response = requests.get(domain + "/m/buergerservice/extern/calendar/?uid=15940648-b483-46d9-819e-285707f1fc34",
+                            headers=headers,
                             allow_redirects=False)
     # Base url should return 302 with 'wsid' as a parameter in the url
     print(response)
@@ -63,7 +69,7 @@ def get_appointments() -> list[Appointment]:
         "__RequestVerificationToken": response.cookies.get_dict()["__RequestVerificationToken"],
         "ASP.NET_SessionId": response.cookies.get_dict()["ASP.NET_SessionId"],
     }    
-    response2 = requests.get(base_url, cookies=cookies, allow_redirects=False)
+    response2 = requests.get(base_url, cookies=cookies, headers=headers, allow_redirects=False)
 
     # Load request token
     pattern = (r"^(?:.*)<input type='hidden' id='RequestVerificationToken' name='__RequestVerificationToken' value='("
@@ -139,7 +145,7 @@ def notify_aachen_anmeldung(bot):
             bot.send_message(chat_id=channel_id, text=text)
 
 
-# notify_aachen_anmeldung(None)
+notify_aachen_anmeldung(None)
     # for a in sorted(get_appointments(), key=(lambda x : x.date_time)):
     #     print(a)
 
