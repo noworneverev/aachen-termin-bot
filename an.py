@@ -206,7 +206,7 @@
 # # Date: 2025-05-16 10:50:00+02:00, Unit:  Bürgerservice Katschhof, Duration: 10 minutes
 
 
-# TODO It works locally, but something wrong with render/cloudfare.
+# TODO It works locally, but something wrong with cloudfare, already tried github action and render, cannot bypass, may need to use selenium.
 import cloudscraper
 import logging
 import re
