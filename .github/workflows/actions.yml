@@ -34,10 +34,10 @@ jobs:
       - name: execute py script # run ping.py
         run: python ping.py
       
-      - name: execute an.py
+      - name: execute an3.py
         env:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
-        run: python an2.py
+        run: python an3.py
 
   restart-service:
     runs-on: ubuntu-latest
