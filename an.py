@@ -8,6 +8,8 @@ from datetime import datetime
 from collections import defaultdict
 from utils import get_channel_id, Location
 
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+
 class Appointment:
     def __init__(self, date_time, unit, duration, link):
         self.date_time: datetime = date_time
@@ -51,16 +53,14 @@ def get_appointments() -> list[Appointment]:
         'Accept-Language': 'en-US,en;q=0.9',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
     }
-    domain = "https://stadt-aachen.saas.smartcjm.com"
-    print('==========================')
+    domain = "https://stadt-aachen.saas.smartcjm.com"    
+    logging.info("Getting wsid token")
     response = requests.get(domain + "/m/buergerservice/extern/calendar/?uid=15940648-b483-46d9-819e-285707f1fc34",
                             headers=headers,
                             allow_redirects=False)
-    # Base url should return 302 with 'wsid' as a parameter in the url
-    print('==========================')
-    print(response)
-    print(response.headers)
-    print('==========================')
+    # Base url should return 302 with 'wsid' as a parameter in the url        
+    logging.info(response)
+    logging.info(response.headers)    
     if response.status_code != 302:        
         print("Couldn't get wsid token")
         exit()
