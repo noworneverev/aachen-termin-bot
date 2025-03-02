@@ -48,31 +48,55 @@ def enable_debug():
 
 
 def get_appointments() -> list[Appointment]:
+    # headers = {
+    #     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    #     'Accept-Language': 'en-US,en;q=0.9',
+    #     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    # }
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Referer': 'https://stadt-aachen.saas.smartcjm.com/',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'same-origin',
+        'Sec-Fetch-User': '?1',
+        'Upgrade-Insecure-Requests': '1',
+        'Connection': 'keep-alive',
+        'DNT': '1',
     }
     domain = "https://stadt-aachen.saas.smartcjm.com"    
     logging.info("Getting wsid token")
-    response = requests.get(domain + "/m/buergerservice/extern/calendar/?uid=15940648-b483-46d9-819e-285707f1fc34",
-                            headers=headers,
-                            allow_redirects=False)
+
+    session = requests.Session()
+    session.headers.update(headers)
+    initial_url = domain + "/m/buergerservice/extern/calendar/?uid=15940648-b483-46d9-819e-285707f1fc34"
+    response = session.get(initial_url, allow_redirects=False)
+
+    # response = requests.get(domain + "/m/buergerservice/extern/calendar/?uid=15940648-b483-46d9-819e-285707f1fc34",
+    #                         headers=headers,
+    #                         allow_redirects=False)
+
     # Base url should return 302 with 'wsid' as a parameter in the url        
     logging.info(response)
     logging.info(response.headers)    
     if response.status_code != 302:        
-        print("Couldn't get wsid token")
+        logging.error("Couldn't get wsid token. Status code: %d", response.status_code)
+        # print("Couldn't get wsid token")
         exit()
     
     # Get parameter from the url
     base_url = domain + response.headers["Location"]
-    # Only send cookies "__RequestVerificationToken" and "ASP.NET_SessionId"
-    cookies = {
-        "__RequestVerificationToken": response.cookies.get_dict()["__RequestVerificationToken"],
-        "ASP.NET_SessionId": response.cookies.get_dict()["ASP.NET_SessionId"],
-    }    
-    response2 = requests.get(base_url, cookies=cookies, headers=headers, allow_redirects=False)
+    # # Only send cookies "__RequestVerificationToken" and "ASP.NET_SessionId"
+    # cookies = {
+    #     "__RequestVerificationToken": response.cookies.get_dict()["__RequestVerificationToken"],
+    #     "ASP.NET_SessionId": response.cookies.get_dict()["ASP.NET_SessionId"],
+    # }    
+    # response2 = requests.get(base_url, cookies=cookies, headers=headers, allow_redirects=False)
+
+    response2 = session.get(base_url, allow_redirects=False)
 
     # Load request token
     pattern = (r"^(?:.*)<input type='hidden' id='RequestVerificationToken' name='__RequestVerificationToken' value='("
@@ -94,11 +118,13 @@ def get_appointments() -> list[Appointment]:
 
     # Send post to base_url with form_data
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
-    requests.post(base_url, data=form_data, cookies=cookies, headers=headers, allow_redirects=False)
+    # requests.post(base_url, data=form_data, cookies=cookies, headers=headers, allow_redirects=False)
+    session.post(base_url, data=form_data, headers=headers, allow_redirects=False)
 
     # Finally, get the appointments
     url = base_url.split("?")[0] + "search_result?search_mode=all&" + base_url.split("?")[1]
-    response4 = requests.get(url, cookies=cookies, allow_redirects=False)
+    # response4 = requests.get(url, cookies=cookies, allow_redirects=False)
+    response4 = session.get(url, allow_redirects=False)
 
     pattern = r"(?<=<div id=\"json_appointment_list\">).*?(?=</div>)"
     match = re.search(pattern, response4.text, flags=re.DOTALL)
