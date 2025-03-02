@@ -215,6 +215,8 @@ from html import unescape
 from datetime import datetime
 from collections import defaultdict
 from utils import get_channel_id, Location
+import telegram
+import os
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -342,4 +344,7 @@ def notify_aachen_anmeldung(bot):
             text = f"{text}\n[🔥 Book Now\!]({an_link})"
             bot.send_message(chat_id=channel_id, text=text)
 
-# notify_aachen_anmeldung(None)
+if __name__ == "__main__":
+    TOKEN = os.environ['TG_TOKEN']
+    bot = telegram.Bot(token=TOKEN)
+    notify_aachen_anmeldung(bot)
