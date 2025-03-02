@@ -196,7 +196,7 @@ def notify_aachen_anmeldung(bot):
             bot.send_message(chat_id=channel_id, text=text)
 
 
-notify_aachen_anmeldung(None)
+# notify_aachen_anmeldung(None)
     # for a in sorted(get_appointments(), key=(lambda x : x.date_time)):
     #     print(a)
 
