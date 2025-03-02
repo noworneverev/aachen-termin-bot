@@ -342,4 +342,4 @@ def notify_aachen_anmeldung(bot):
             text = f"{text}\n[🔥 Book Now\!]({an_link})"
             bot.send_message(chat_id=channel_id, text=text)
 
-notify_aachen_anmeldung(None)
+# notify_aachen_anmeldung(None)
