@@ -53,6 +53,7 @@ def get_appointments() -> list[Appointment]:
         # Extract the form token from the page content using a flexible regex
         content = page.content()
         pattern = r"<input\b[^>]*\bname=['\"]__RequestVerificationToken['\"][^>]*\bvalue=['\"](.*?)['\"][^>]*>"
+        print(content)
         match = re.search(pattern, content)
         if not match:
             print("Couldn't get form token")
