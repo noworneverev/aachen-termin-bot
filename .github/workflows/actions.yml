@@ -11,7 +11,7 @@ on:
 jobs:
   ping:
     runs-on: ubuntu-latest
-    if: github.event.schedule == '*/5 * * * *'
+    if: github.event.schedule == '*/5 * * * *' || github.event_name == 'workflow_dispatch'
     steps:
       - name: checkout repo content
         uses: actions/checkout@v4 # checkout the repository content
@@ -36,7 +36,7 @@ jobs:
 
   restart-service:
     runs-on: ubuntu-latest
-    if: github.event.schedule == '0 * * * *'
+    if: github.event.schedule == '0 * * * *' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Restart Render Service
         env:
