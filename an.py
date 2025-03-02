@@ -265,7 +265,16 @@ def get_appointments() -> list[Appointment]:
     logging.info("Getting wsid token")
 
     # Replace requests with cloudscraper
-    scraper = cloudscraper.create_scraper()
+    # scraper = cloudscraper.create_scraper()
+    scraper = cloudscraper.create_scraper(
+        browser={
+            'browser': 'chrome',
+            'platform': 'windows',
+            'mobile': False
+        },
+        delay=10,  # Add delay to mimic human behavior
+        debug=False
+    )
     session = scraper
     session.headers.update(headers)
     initial_url = domain + "/m/buergerservice/extern/calendar/?uid=15940648-b483-46d9-819e-285707f1fc34"
