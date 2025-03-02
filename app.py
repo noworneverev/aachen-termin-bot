@@ -49,8 +49,8 @@ def hello_world():
 def job1():    
     bot = telegram.Bot(token=TOKEN)
     notify_aachen_termin(bot)
-    notify_aachen_anmeldung(bot)
     notify_abholung(bot)
+    # notify_aachen_anmeldung(bot)
 
 def notify_abholung(bot: telegram.Bot):
     is_available, res = abholung_termin()
