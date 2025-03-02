@@ -52,12 +52,15 @@ def get_appointments() -> list[Appointment]:
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
     }
     domain = "https://stadt-aachen.saas.smartcjm.com"
+    print('==========================')
     response = requests.get(domain + "/m/buergerservice/extern/calendar/?uid=15940648-b483-46d9-819e-285707f1fc34",
                             headers=headers,
                             allow_redirects=False)
     # Base url should return 302 with 'wsid' as a parameter in the url
+    print('==========================')
     print(response)
     print(response.headers)
+    print('==========================')
     if response.status_code != 302:        
         print("Couldn't get wsid token")
         exit()
