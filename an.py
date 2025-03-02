@@ -75,10 +75,10 @@ def get_appointments() -> list[Appointment]:
     domain = "https://stadt-aachen.saas.smartcjm.com"    
     logging.info("Getting wsid token")
 
-    session = requests.Session()
-    session.headers.update(headers)
+    # session = requests.Session()
+    # session.headers.update(headers)
     initial_url = domain + "/m/buergerservice/extern/calendar/?uid=15940648-b483-46d9-819e-285707f1fc34"
-    response = session.get(initial_url, allow_redirects=False)
+    # response = session.get(initial_url, allow_redirects=False)
     
     with requests.Session(impersonate="chrome120") as session:
         response = session.get(
@@ -88,7 +88,9 @@ def get_appointments() -> list[Appointment]:
         )
 
         if response.status_code != 302:
+            logging.error(response)
             logging.error(f"Failed to get wsid. Status: {response.status_code}")
+            logging.error(response.text)
             exit()
 
         # Extract redirected URL with wsid
@@ -194,7 +196,7 @@ def notify_aachen_anmeldung(bot):
             bot.send_message(chat_id=channel_id, text=text)
 
 
-# notify_aachen_anmeldung(None)
+notify_aachen_anmeldung(None)
     # for a in sorted(get_appointments(), key=(lambda x : x.date_time)):
     #     print(a)
 
