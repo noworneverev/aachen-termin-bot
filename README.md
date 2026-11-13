@@ -19,6 +19,11 @@ https://t.me/+sCtrviN5NNw2YzBi
 
 This channel is exclusively for students of FH Aachen who are applying for visa extensions.
 
+## Führerscheinstelle Würselen Termin
+https://t.me/aachen_driver
+
+This channel sends appointment alerts for new or extended driver licenses, conversion of foreign driver licenses, and renewals.
+
 ## Abholung Aufenthaltserlaubnis Termin
 https://t.me/+1EGm6-NDQGM2ODAy
 

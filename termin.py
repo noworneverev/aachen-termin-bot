@@ -3,6 +3,7 @@ from typing import Final
 import logging
 import bs4
 from utils import is_date_within_n_days, Location
+from urllib.parse import urlencode, urljoin
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -62,7 +63,13 @@ def number_to_month(number):
     return month_dict.get(number, "Invalid Month")
 
 
-def format_url_2(soup: bs4.BeautifulSoup, needle: str, form_options_position: int = 0):
+def format_url_2(
+    soup: bs4.BeautifulSoup,
+    needle: str,
+    form_options_position: int = 0,
+    *,
+    page_url: str = "https://termine.staedteregion-aachen.de/auslaenderamt/select2?md=1",
+):
     """ Find the form options and format a url for the appropriate entry on 
     the "Auswahl des Anliegens" page of the appointment finder.
 
@@ -70,21 +77,34 @@ def format_url_2(soup: bs4.BeautifulSoup, needle: str, form_options_position: in
     :param needle: String to search for in a <h3></h3> element.
     :param form_options_position: Some options on the page have multiple elements (students / family / employees, for example)
     """
-    url_base = "https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1"
-    header_element = soup.find("h3", string=lambda s: needle in s if s else False)
-    if header_element:
-        next_sibling = header_element.find_next_sibling()
-        if next_sibling:
-            li_elements = next_sibling.find_all("li")
-            cnc_id = li_elements[form_options_position].get("id").split("-")[-1] if li_elements else None
-            url_2 = f"{url_base}&cnc-{cnc_id}=1"            
-            logging.info(f"{f'{needle} has cnc id: ' + cnc_id}")
-            return True, url_2
-        else:
-            return False, f"Sibling element to h3 with '{needle}' not found."
-    else:
-        logging.info(f"Element containing '{needle}' not found.")
+    header_element = soup.find(
+        "h3", string=lambda value: needle in value if value else False
+    )
+    if not header_element:
+        logging.info("Element containing '%s' not found.", needle)
         return False, f"Element containing '{needle}' not found."
+
+    form = header_element.find_parent("form", id="cnc-select-form")
+    mdt = form.find("input", {"name": "mdt"}) if form else None
+    if not form or not mdt or not mdt.get("value"):
+        return False, "The appointment form is missing its mdt value."
+
+    concern_group = header_element.find_parent(
+        "div", id=lambda value: value and value.startswith("concerns_accordion-")
+    )
+    concerns = concern_group.select("input.cnc-number[name^='cnc-']") if concern_group else []
+    if form_options_position < 0 or form_options_position >= len(concerns):
+        return False, f"No concern at position {form_options_position} for '{needle}'."
+
+    concern_name = concerns[form_options_position].get("name")
+    if not concern_name:
+        return False, f"Concern at position {form_options_position} has no name."
+
+    action = form.get("action") or "location"
+    location_url = urljoin(page_url, action)
+    query = urlencode({"mdt": mdt["value"], "select_cnc": "1", concern_name: "1"})
+    logging.info("%s has concern id: %s", needle, concern_name.removeprefix("cnc-"))
+    return True, f"{location_url}?{query}"
 
 
 def abholung_termin():
@@ -100,7 +120,7 @@ def abholung_termin():
 
     # Get RWTH cnc id
     soup = bs4.BeautifulSoup(res_1.content, 'html.parser')
-    success, url_2 = format_url_2(soup, "Abholung", 0)
+    success, url_2 = format_url_2(soup, "Abholung", 0, page_url=url_1)
     if success:
         res_2 = session.get(url_2)
     else:
@@ -179,7 +199,7 @@ def superc_termin(form_pos: int = 0):
 
     # Get RWTH cnc id
     soup = bs4.BeautifulSoup(res_1.content, 'html.parser')         
-    success, url_2 = format_url_2(soup, "Super C", form_pos)
+    success, url_2 = format_url_2(soup, "Super C", form_pos, page_url=url_1)
     if success:
         res_2 = session.get(url_2)
     else:
@@ -234,18 +254,9 @@ def fh_termin():
 
     # Get RWTH cnc id
     soup = bs4.BeautifulSoup(res_1.content, 'html.parser')         
-    header_element = soup.find('h3', string=lambda s: 'Fachhochschule Aachen' in s if s else False)
-    
-    if header_element:        
-        next_sibling = header_element.find_next_sibling()
-        if next_sibling:
-            li_elements = next_sibling.find_all('li')
-            cnc_id = li_elements[0].get('id').split('-')[-1] if li_elements else None
-            url_2 = f'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-{cnc_id}=1'
-            logging.info(f'{"Fachhochschule Aachen cnc id: " + cnc_id}')
-    else:
-        logging.info("Element containing 'Fachhochschule Aachen' not found.")
-        return False, "Element containing 'Fachhochschule Aachen' not found."
+    success, url_2 = format_url_2(soup, "Fachhochschule Aachen", 0, page_url=url_1)
+    if not success:
+        return False, url_2
         
     res_2 = session.get(url_2)
 
@@ -289,70 +300,105 @@ def fh_termin():
 #     'Team 3': 'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-297=1'
 # }
 
-def get_hbf_url(res_1, team_name):    
-    soup = bs4.BeautifulSoup(res_1.content, 'html.parser')         
-    header_element = soup.find('h3', string=lambda s: 'Aufenthalt' in s if s else False)
-    url_2 = ''
-    li_index = int(team_name.split(' ')[-1]) - 1
-    if header_element:        
-        next_sibling = header_element.find_next_sibling()
-        if next_sibling:
-            li_elements = next_sibling.find_all('li')
-            cnc_id = li_elements[li_index].get('id').split('-')[-1] if li_elements else None
-            url_2 = f'https://termine.staedteregion-aachen.de/auslaenderamt/location?mdt=89&select_cnc=1&cnc-{cnc_id}=1'
-            logging.info(f"Aufenthalt {team_name} cnc id: {cnc_id}")
-    else:
-        logging.info("Element containing 'Aufenthalt' not found.")        
+def _check_selected_appointment(session, location_url: str, suggest_url: str, label: str):
+    location_response = session.get(location_url, timeout=30)
+    location_response.raise_for_status()
+    soup = bs4.BeautifulSoup(location_response.content, 'html.parser')
 
-    return url_2
+    fields = {}
+    for name in ('loc', 'gps_lat', 'gps_long'):
+        field = soup.find('input', {'name': name})
+        if not field or not field.get('value'):
+            return False, f"Could not read {name} for {label}."
+        fields[name] = field['value']
 
-def aachen_hbf_termin(team_name):
-    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"    
-    headers = {"User-Agent": user_agent}
+    continue_button = soup.find('input', {'name': 'select_location', 'value': 'Weiter'})
+    if not continue_button:
+        return False, f"Could not find the continue button for {label}."
+
+    fields['select_location'] = continue_button['value']
+    session.post(location_url, data=fields, timeout=30).raise_for_status()
+    response = session.get(suggest_url, timeout=30)
+    response.raise_for_status()
+    soup = bs4.BeautifulSoup(response.content, 'html.parser')
+
+    no_appointments = (
+        "Kein freier Termin verfügbar" in response.text
+        or "Derzeit sind leider alle Termine vergeben" in response.text
+        or "Keine Zeiten verfügbar" in response.text
+    )
+    if no_appointments:
+        logging.info("No appointments are currently available for %s.", label)
+        return False, f"No appointments are currently available for {label}."
+
+    accordion = soup.find('div', {'id': 'sugg_accordion'})
+    summary = soup.find('summary', {'id': 'suggest_details_summary'})
+    if accordion:
+        dates = [heading.get_text(' ', strip=True) for heading in accordion.find_all('h3')]
+        if dates:
+            return True, f"Appointments available for {label}:\n" + '\n'.join(dates)
+    if summary:
+        return True, f"Appointments available for {label}:\n{summary.get_text(' ', strip=True)}"
+
+    return False, f"Could not recognize the appointment response for {label}."
+
+
+def aachen_hbf_termin(team_name=None):
+    """Check the current Hbf service, now booked at Aachen Arkaden."""
+    select_url = 'https://termine.staedteregion-aachen.de/auslaenderamt/select2?md=1'
+    suggest_url = 'https://termine.staedteregion-aachen.de/auslaenderamt/suggest'
     session = requests.Session()
-    session.headers.update(headers)
+    session.headers.update({'User-Agent': USER_AGENT_STRING})
 
-    url_1 = 'https://termine.staedteregion-aachen.de/auslaenderamt/select2?md=1'
-    url_2 = ''    
-    url_3 = 'https://termine.staedteregion-aachen.de/auslaenderamt/suggest'
-    res_1 = session.get(url_1)
+    response = session.get(select_url, timeout=30)
+    response.raise_for_status()
+    soup = bs4.BeautifulSoup(response.content, 'html.parser')
+    success, location_url = format_url_2(soup, 'Infostelle', 0, page_url=select_url)
+    if not success:
+        return False, location_url
 
-    url_2 = get_hbf_url(res_1, team_name)
+    return _check_selected_appointment(
+        session, location_url, suggest_url, 'Hbf at Aachen Arkaden'
+    )
 
-    res_2 = session.get(url_2)
-    soup = bs4.BeautifulSoup(res_2.content, 'html.parser')
-    loc = soup.find('input', {'name': 'loc'}).get('value')
-    logging.info(f"Aufenthalt {team_name} loc: {loc}")
 
-    payload = {'loc':str(loc), 'gps_lat': '55.77858', 'gps_long': '65.07867', 'select_location': 'Ausländeramt Aachen, 2. Etage auswählen'}
-    res_3 = session.post(url_2, data=payload)
-    res_4 = session.get(url_3)
-    
-    if "Kein freier Termin verfügbar" not in res_4.text:        
-        
-        # get exact termin date
-        soup = bs4.BeautifulSoup(res_4.text, 'html.parser')
-        div = soup.find("div", {"id": "sugg_accordion"})
-        summary_tag = soup.find('summary', id='suggest_details_summary')
-        
-        if div:
-            h3 = div.find_all("h3")
-            res = f'{team_name}\n'
-            for h in h3:
-                res += h.text + '\n'             
-            logging.info(res[:-1])
-            return True, res[:-1]
-        elif summary_tag:
-            summary_text = summary_tag.get_text(strip=True)
-            logging.info(f'Appointment available now at HBF {team_name}')
-            logging.info(f'{summary_text}')
-            return True, f'{team_name}\n' + summary_text
-        else:
-            logging.info(f'Cannot find sugg_accordion! Possible new appointments are available now at HBF {team_name}')                
-            return False, f"Cannot find sugg_accordion! Possible new appointments are available now at HBF {team_name}"
-    else:
-        logging.info(f'No appointment is available at HBF {team_name}.')                
-        return False, f'No appointment is available at HBF {team_name}.'   
+DRIVER_LICENSE_REQUESTS = (
+    ('Ersterteilung einer Fahrerlaubnis', 'new or extended driver license'),
+    ('Umschreibung ausländische Fahrerlaubnis', 'foreign driver license conversion'),
+    ('Verlängerung einer Fahrerlaubnis', 'driver license renewal'),
+)
+
+
+def driver_termin():
+    """Check Würselen appointments for the driver-license requests in issue #6."""
+    select_url = 'https://termine.staedteregion-aachen.de/select2?md=2'
+    suggest_url = 'https://termine.staedteregion-aachen.de/suggest'
+    available = []
+    results = []
+
+    for concern, label in DRIVER_LICENSE_REQUESTS:
+        session = requests.Session()
+        session.headers.update({'User-Agent': USER_AGENT_STRING})
+        response = session.get(select_url, timeout=30)
+        response.raise_for_status()
+        soup = bs4.BeautifulSoup(response.content, 'html.parser')
+        success, location_url = format_url_2(
+            soup, concern, 0, page_url=select_url
+        )
+        if not success:
+            results.append(location_url)
+            continue
+
+        is_available, result = _check_selected_appointment(
+            session, location_url, suggest_url, label
+        )
+        if is_available:
+            available.append(result)
+        results.append(result)
+
+    if available:
+        return True, '\n\n'.join(available)
+    return False, '\n'.join(results)
 
 
 # superc_termin(1)
